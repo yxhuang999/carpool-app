@@ -9,8 +9,8 @@ public class User {
 
     public String username;
     public String REGISTRATION_TOKEN;
-    public Map<String, Integer> imgSent;
-    public List<String> imgReceived;
+    public Map<String, Integer> stickerSent;
+    public List<Sticker> stickerReceived;
 
     public User() {
 
@@ -19,7 +19,7 @@ public class User {
     public User(String username, String REGISTRATION_TOKEN) {
         this.username = username;
         this.REGISTRATION_TOKEN = REGISTRATION_TOKEN;
-        this.imgSent = new HashMap<>();
-        this.imgReceived = new ArrayList<>();
+        this.stickerSent = new HashMap<>();
+        this.stickerReceived = new ArrayList<>();
     }
 }

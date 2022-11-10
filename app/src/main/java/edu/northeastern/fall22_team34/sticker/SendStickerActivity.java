@@ -9,31 +9,48 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.northeastern.fall22_team34.R;
+import edu.northeastern.fall22_team34.sticker.models.Sticker;
 import edu.northeastern.fall22_team34.sticker.models.User;
 
 public class SendStickerActivity extends AppCompatActivity {
 
     private FirebaseDatabase mDatabase;
+    private StorageReference mStorageRef;
 
     private User user;
     private String username;
@@ -46,11 +63,13 @@ public class SendStickerActivity extends AppCompatActivity {
     private ImageView selectedImgView;
 
     private Button btnSend;
-    private Button btnReceived;
+    private Button btnImgReceived;
+    private Button btnImgSent;
 
     private Uri imageUri;
 
-    private List<Uri> imgReceived = new ArrayList<>();
+    private Map<String, Integer> stickerSent = new HashMap<>();
+    private List<Sticker> stickerReceived = new ArrayList<>();
 
 
     @Override
@@ -67,7 +86,10 @@ public class SendStickerActivity extends AppCompatActivity {
         selectedImgView = findViewById(R.id.selectedImg);
 
         btnSend = findViewById(R.id.btnSend);
-        btnReceived = findViewById(R.id.btnReceived);
+        btnImgReceived = findViewById(R.id.btnImgReceived);
+        btnImgSent = findViewById(R.id.btnImgSent);
+
+        mStorageRef = FirebaseStorage.getInstance().getReference();
 
         mDatabase = FirebaseDatabase.getInstance();
         mDatabase.getReference().child("users").addChildEventListener(new ChildEventListener() {
@@ -118,12 +140,44 @@ public class SendStickerActivity extends AppCompatActivity {
             }
         });
 
-        btnReceived.setOnClickListener(new View.OnClickListener() {
+        btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent stickersReceivedActivity = new Intent(getApplicationContext(), StickersReceivedActivity.class);
-                stickersReceivedActivity.putExtra("RECEIVED", (Serializable) imgReceived);
+                if (imageUri == null) {
+                    Toast.makeText(getApplicationContext(),
+                            "Please Choose a Sticker First", Toast.LENGTH_SHORT).show();
+                } else {
+                    Date date = Calendar.getInstance().getTime();
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+                    String timeSent = dateFormat.format(date);
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            uploadSticker(timeSent);
+                        }
+                    }).start();
+                }
+            }
+        });
+
+        btnImgReceived.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent stickersReceivedActivity = new Intent(getApplicationContext(),
+                        StickersReceivedActivity.class);
+                stickersReceivedActivity.putExtra("USERNAME", username);
                 startActivity(stickersReceivedActivity);
+            }
+        });
+
+        btnImgSent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent stickersSentActivity = new Intent(getApplicationContext(),
+                        StickersSentActivity.class);
+                stickersSentActivity.putExtra("USERNAME", username);
+                startActivity(stickersSentActivity);
             }
         });
     }
@@ -146,4 +200,89 @@ public class SendStickerActivity extends AppCompatActivity {
                     }
                 }
             });
+
+    private void onSendSticker(DatabaseReference dbRef, String sender, Sticker sticker) {
+        dbRef.child("users").child(sender).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                User user = currentData.getValue(User.class);
+
+                if (user == null) {
+                    return Transaction.success(currentData);
+                }
+
+                if (!stickerSent.containsKey(sticker.name)) {
+                    stickerSent.put(sticker.name, 1);
+                } else {
+                    stickerSent.put(sticker.name, user.stickerSent.get(sticker.name) + 1);
+                }
+                user.stickerSent = stickerSent;
+
+                currentData.setValue(user);
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                if (!committed) {
+                    Toast.makeText(SendStickerActivity.this,
+                            "DBError: " + error, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private void onReceiveSticker(DatabaseReference dbRef, String recipient, Sticker sticker) {
+        dbRef.child("users").child(recipient).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                User user = currentData.getValue(User.class);
+
+                if (user == null) {
+                    return Transaction.success(currentData);
+                }
+
+                stickerReceived.add(sticker);
+                user.stickerReceived = stickerReceived;
+
+                currentData.setValue(user);
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                if (!committed) {
+                    Toast.makeText(SendStickerActivity.this,
+                            "DBError: " + error, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    public String getExtension(Uri uri) {
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(uri));
+    }
+
+    public void uploadSticker(String timeSent) {
+        StorageReference stickerRef = mStorageRef.child(System.currentTimeMillis() + "." + getExtension(imageUri));
+
+        stickerRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(SendStickerActivity.this,
+                        "Sticker Sent Successfully ", Toast.LENGTH_SHORT).show();
+
+                Sticker sticker = new Sticker(taskSnapshot.getUploadSessionUri().toString(),
+                        imageUri.toString().replaceAll("[^a-zA-Z0-9]", ""),
+                        username, recipientUsername, timeSent);
+
+                onSendSticker(mDatabase.getReference(), username, sticker);
+                onReceiveSticker(mDatabase.getReference(), recipientUsername, sticker);
+            }
+        });
+    }
 }
