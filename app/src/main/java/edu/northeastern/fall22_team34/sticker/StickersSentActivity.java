@@ -17,11 +17,11 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import edu.northeastern.fall22_team34.R;
-import edu.northeastern.fall22_team34.sticker.adapters.StickerReceivedAdapter;
 import edu.northeastern.fall22_team34.sticker.adapters.StickerSentAdapter;
 import edu.northeastern.fall22_team34.sticker.models.Sticker;
 import edu.northeastern.fall22_team34.sticker.models.User;
@@ -33,6 +33,8 @@ public class StickersSentActivity extends AppCompatActivity {
     private String username;
     private Map<String, Integer> stickerSent;
     private List<Sticker> stickerList;
+
+    private List<Integer> countList;
 
     private RecyclerView stickerSentRecyclerView;
 
@@ -46,6 +48,7 @@ public class StickersSentActivity extends AppCompatActivity {
         username = getIntent().getStringExtra("USERNAME");
         stickerSent = (Map<String, Integer>) getIntent().getSerializableExtra("SENT");
         stickerList = (List<Sticker>) getIntent().getSerializableExtra("STICKERLIST");
+        countList = getStickerCount(stickerSent, stickerList);
 
         stickerSentRecyclerView = findViewById(R.id.stickerSentRecyclerView);
         stickerSentRecyclerView.setHasFixedSize(true);
@@ -57,8 +60,10 @@ public class StickersSentActivity extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     if (username.equals(dataSnapshot.getValue(User.class).username)) {
                         stickerSent = dataSnapshot.getValue(User.class).stickerSent;
+                        stickerList = dataSnapshot.getValue(User.class).stickerList;
 
-                        stickerSentRecyclerView.setAdapter(new StickerSentAdapter(stickerList, new ArrayList<>(stickerSent.values()), getApplicationContext()));
+                        countList = getStickerCount(stickerSent, stickerList);
+                        stickerSentRecyclerView.setAdapter(new StickerSentAdapter(stickerList, countList, getApplicationContext()));
                     }
                 }
             }
@@ -79,8 +84,10 @@ public class StickersSentActivity extends AppCompatActivity {
                     return Transaction.success(currentData);
                 }
                 stickerSent = user.stickerSent;
+                stickerList = user.stickerList;
 
-                stickerSentRecyclerView.setAdapter(new StickerSentAdapter(stickerList, new ArrayList<>(stickerSent.values()), getApplicationContext()));
+                countList = getStickerCount(stickerSent, stickerList);
+                stickerSentRecyclerView.setAdapter(new StickerSentAdapter(stickerList, countList, getApplicationContext()));
                 return Transaction.success(currentData);
             }
 
@@ -89,5 +96,13 @@ public class StickersSentActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private List<Integer> getStickerCount(Map<String, Integer> stickerSent, List<Sticker> stickerList) {
+        List<Integer> counts = new ArrayList<>();
+        for (int i = 0; i < stickerList.size(); i++) {
+            counts.add(stickerSent.get(stickerList.get(i).name));
+        }
+        return counts;
     }
 }
