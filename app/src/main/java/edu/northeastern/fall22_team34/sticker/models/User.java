@@ -10,6 +10,7 @@ public class User {
     public String username;
     public String REGISTRATION_TOKEN;
     public Map<String, Integer> stickerSent;
+    public List<Sticker> stickerList;
     public List<Sticker> stickerReceived;
 
     public User() {
@@ -20,6 +21,7 @@ public class User {
         this.username = username;
         this.REGISTRATION_TOKEN = REGISTRATION_TOKEN;
         this.stickerSent = new HashMap<>();
+        this.stickerList = new ArrayList<>();
         this.stickerReceived = new ArrayList<>();
     }
 }

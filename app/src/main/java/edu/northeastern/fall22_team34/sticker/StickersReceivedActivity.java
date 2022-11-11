@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -20,7 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.List;
 
 import edu.northeastern.fall22_team34.R;
-import edu.northeastern.fall22_team34.sticker.adapters.StickerAdapter;
+import edu.northeastern.fall22_team34.sticker.adapters.StickerReceivedAdapter;
 import edu.northeastern.fall22_team34.sticker.models.Sticker;
 import edu.northeastern.fall22_team34.sticker.models.User;
 
@@ -55,7 +53,7 @@ public class StickersReceivedActivity extends AppCompatActivity {
                     if (username.equals(dataSnapshot.getValue(User.class).username)) {
                         stickerReceived = dataSnapshot.getValue(User.class).stickerReceived;
 
-                        stickerRecyclerView.setAdapter(new StickerAdapter(stickerReceived, getApplicationContext()));
+                        stickerRecyclerView.setAdapter(new StickerReceivedAdapter(stickerReceived, getApplicationContext()));
                     }
                 }
             }
@@ -76,7 +74,7 @@ public class StickersReceivedActivity extends AppCompatActivity {
                     return Transaction.success(currentData);
                 }
                 stickerReceived = user.stickerReceived;
-                stickerRecyclerView.setAdapter(new StickerAdapter(stickerReceived, getApplicationContext()));
+                stickerRecyclerView.setAdapter(new StickerReceivedAdapter(stickerReceived, getApplicationContext()));
                 return Transaction.success(currentData);
             }
 

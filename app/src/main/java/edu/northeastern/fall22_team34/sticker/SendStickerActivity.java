@@ -72,6 +72,8 @@ public class SendStickerActivity extends AppCompatActivity {
     private Uri imageUri;
 
     private Map<String, Integer> stickerSent = new HashMap<>();
+    private List<Sticker> stickerList = new ArrayList<>();
+
     private Map<String, List<Sticker>> stickerReceived = new HashMap<>();
 
 
@@ -124,30 +126,27 @@ public class SendStickerActivity extends AppCompatActivity {
             }
         });
 
-        mDatabase.getReference().child("users").child(username).addChildEventListener(new ChildEventListener() {
+        mDatabase.getReference().child("users").child(username).runTransaction(new Transaction.Handler() {
+            @NonNull
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                User user = currentData.getValue(User.class);
 
+                if (user == null) {
+                    return Transaction.success(currentData);
+                }
+
+                if (user.stickerSent != null) {
+                    stickerSent = user.stickerSent;
+                }
+                if (user.stickerList != null) {
+                    stickerList = user.stickerList;
+                }
+                return Transaction.success(currentData);
             }
 
             @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                //List<Sticker> receivedList = (List<Sticker>) snapshot.getValue();
-                //stickerReceived.put(username, receivedList);
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
 
             }
         });
@@ -203,15 +202,17 @@ public class SendStickerActivity extends AppCompatActivity {
             }
         });
 
-        /* btnImgSent.setOnClickListener(new View.OnClickListener() {
+        btnImgSent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent stickersSentActivity = new Intent(getApplicationContext(),
                         StickersSentActivity.class);
                 stickersSentActivity.putExtra("USERNAME", username);
+                stickersSentActivity.putExtra("SENT", (Serializable) stickerSent);
+                stickersSentActivity.putExtra("STICKERLIST", (Serializable) stickerList);
                 startActivity(stickersSentActivity);
             }
-        }); */
+        });
     }
 
     private void openFileSelector() {
@@ -246,10 +247,12 @@ public class SendStickerActivity extends AppCompatActivity {
 
                 if (!stickerSent.containsKey(sticker.name)) {
                     stickerSent.put(sticker.name, 1);
+                    stickerList.add(sticker);
                 } else {
                     stickerSent.put(sticker.name, user.stickerSent.get(sticker.name) + 1);
                 }
                 user.stickerSent = stickerSent;
+                user.stickerList = stickerList;
 
                 currentData.setValue(user);
                 return Transaction.success(currentData);

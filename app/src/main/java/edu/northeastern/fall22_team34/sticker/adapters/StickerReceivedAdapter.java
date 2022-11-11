@@ -1,7 +1,6 @@
 package edu.northeastern.fall22_team34.sticker.adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,12 @@ import java.util.List;
 import edu.northeastern.fall22_team34.R;
 import edu.northeastern.fall22_team34.sticker.models.Sticker;
 
-public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerViewHolder> {
+public class StickerReceivedAdapter extends RecyclerView.Adapter<StickerReceivedAdapter.StickerViewHolder> {
 
     private List<Sticker> stickerReceived;
     private Context context;
 
-    public StickerAdapter(List<Sticker> stickerReceived, Context context) {
+    public StickerReceivedAdapter(List<Sticker> stickerReceived, Context context) {
         this.stickerReceived = stickerReceived;
         this.context = context;
     }
@@ -31,7 +30,7 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.StickerV
     @NonNull
     @Override
     public StickerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_container_sticker, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_container_sticker_received, parent, false);
         return new StickerViewHolder(view);
     }
 
