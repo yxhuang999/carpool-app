@@ -13,35 +13,48 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Team34"
-        android:textSize="@dimen/_24ssp"
         android:textColor="@color/colorTextIcons"
+        android:textSize="@dimen/_24ssp"
+        app:layout_constraintBottom_toTopOf="@id/EnterTVShowsButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/EnterTVShowsButton"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/EnterTVShowsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TV Shows Search"
         android:backgroundTint="@color/colorTextIcons"
+        android:text="TV Shows Search"
         android:textColor="@color/colorPrimaryDark"
-        app:layout_constraintTop_toBottomOf="@id/team34Intro"
         app:layout_constraintBottom_toTopOf="@id/EnterStickerButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/team34Intro" />
 
     <Button
         android:id="@+id/EnterStickerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorTextIcons"
         android:text="Send Sticker"
         android:textColor="@color/colorPrimaryDark"
-        android:backgroundTint="@color/colorTextIcons"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/EnterTVShowsButton" />
+
+    <Button
+        android:id="@+id/AboutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/colorTextIcons"
+        android:text="About"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/team34Intro" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

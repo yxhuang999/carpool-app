@@ -11,6 +11,7 @@
         android:id="@+id/username_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:backgroundTint="@color/white"
         android:ems="12"
         android:hint="Username"
@@ -20,16 +21,16 @@
         android:textColorHint="@color/colorTextSecondary"
         android:textSize="@dimen/_13ssp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/registerUserBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/registerUserBtn"
+        android:id="@+id/loginUserBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="344dp"
         android:backgroundTint="@color/colorTextIcons"
-        android:text="Register"
+        android:text="Login"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBaseline_toBaselineOf="@+id/username_text"
         app:layout_constraintEnd_toEndOf="parent"

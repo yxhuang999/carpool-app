@@ -4,6 +4,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/Users/yixuanh/AndroidStudioProjects/keystore/projectkeystore')
+            storePassword 'team34'
+            keyAlias 'project key'
+            keyPassword 'team34'
+        }
+    }
     compileSdk 33
 
     defaultConfig {
@@ -14,6 +22,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
     }
 
     compileOptions {

@@ -39,9 +39,11 @@
 
     <ImageView
         android:id="@+id/selectedImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_36sdp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_100sdp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/btnSend"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnChooseImg" />
@@ -56,10 +58,8 @@
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toTopOf="@id/btnImgReceived"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/selectedImg"
-        app:layout_constraintVertical_bias="0.955" />
+        app:layout_constraintTop_toBottomOf="@id/selectedImg" />
 
     <Button
         android:id="@+id/btnImgReceived"
@@ -68,9 +68,10 @@
         android:backgroundTint="@color/colorTextIcons"
         android:text="Stickers Received"
         android:textColor="@color/colorPrimaryDark"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnImgSent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnImgSent"/>
+        app:layout_constraintTop_toBottomOf="@id/btnSend" />
 
     <Button
         android:id="@+id/btnImgSent"
@@ -80,7 +81,8 @@
         android:text="Stickers Sent"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btnImgReceived"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnImgReceived" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

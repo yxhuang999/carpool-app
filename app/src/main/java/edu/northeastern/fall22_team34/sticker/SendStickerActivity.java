@@ -13,6 +13,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -42,6 +45,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.UnaryOperator;
 
 import edu.northeastern.fall22_team34.R;
 import edu.northeastern.fall22_team34.sticker.models.Sticker;
@@ -52,7 +56,6 @@ public class SendStickerActivity extends AppCompatActivity {
     private FirebaseDatabase mDatabase;
     private StorageReference mStorageRef;
 
-    private User user;
     private String username;
     private List<String> validUsernames;
 
@@ -69,7 +72,7 @@ public class SendStickerActivity extends AppCompatActivity {
     private Uri imageUri;
 
     private Map<String, Integer> stickerSent = new HashMap<>();
-    private List<Sticker> stickerReceived = new ArrayList<>();
+    private Map<String, List<Sticker>> stickerReceived = new HashMap<>();
 
 
     @Override
@@ -108,6 +111,34 @@ public class SendStickerActivity extends AppCompatActivity {
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
                 validUsernames.remove(user.username);
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        mDatabase.getReference().child("users").child(username).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                //List<Sticker> receivedList = (List<Sticker>) snapshot.getValue();
+                //stickerReceived.put(username, receivedList);
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
             }
 
             @Override
@@ -167,11 +198,12 @@ public class SendStickerActivity extends AppCompatActivity {
                 Intent stickersReceivedActivity = new Intent(getApplicationContext(),
                         StickersReceivedActivity.class);
                 stickersReceivedActivity.putExtra("USERNAME", username);
+                stickersReceivedActivity.putExtra("RECEIVED", (Serializable) stickerReceived.get(username));
                 startActivity(stickersReceivedActivity);
             }
         });
 
-        btnImgSent.setOnClickListener(new View.OnClickListener() {
+        /* btnImgSent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent stickersSentActivity = new Intent(getApplicationContext(),
@@ -179,7 +211,7 @@ public class SendStickerActivity extends AppCompatActivity {
                 stickersSentActivity.putExtra("USERNAME", username);
                 startActivity(stickersSentActivity);
             }
-        });
+        }); */
     }
 
     private void openFileSelector() {
@@ -244,8 +276,16 @@ public class SendStickerActivity extends AppCompatActivity {
                     return Transaction.success(currentData);
                 }
 
-                stickerReceived.add(sticker);
-                user.stickerReceived = stickerReceived;
+                if (!stickerReceived.containsKey(recipient)) {
+                    stickerReceived.put(recipient, new ArrayList<>());
+                }
+                stickerReceived.get(recipient).add(sticker);
+
+                if (user.stickerReceived == null) {
+                    user.stickerReceived = stickerReceived.get(recipient);
+                } else {
+                    user.stickerReceived.add(sticker);
+                }
 
                 currentData.setValue(user);
                 return Transaction.success(currentData);
@@ -274,9 +314,12 @@ public class SendStickerActivity extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Toast.makeText(SendStickerActivity.this,
-                        "Sticker Sent Successfully ", Toast.LENGTH_SHORT).show();
+                        "Sticker Sent Successfully", Toast.LENGTH_SHORT).show();
 
-                Sticker sticker = new Sticker(taskSnapshot.getUploadSessionUri().toString(),
+                Task<Uri> stickerTask = taskSnapshot.getStorage().getDownloadUrl();
+                while (!stickerTask.isSuccessful());
+                Uri downloadUri = stickerTask.getResult();
+                Sticker sticker = new Sticker(downloadUri.toString(),
                         imageUri.toString().replaceAll("[^a-zA-Z0-9]", ""),
                         username, recipientUsername, timeSent);
 

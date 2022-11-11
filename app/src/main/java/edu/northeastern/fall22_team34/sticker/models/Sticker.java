@@ -1,8 +1,6 @@
 package edu.northeastern.fall22_team34.sticker.models;
 
-import android.net.Uri;
-
-public class Sticker {
+public class Sticker implements java.io.Serializable {
 
     public String imageUri;
     public String name;

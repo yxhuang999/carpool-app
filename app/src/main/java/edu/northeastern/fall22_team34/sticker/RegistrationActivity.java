@@ -32,7 +32,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private EditText mEditText;
     private String username;
-    private Button mRegisterBtn;
+    private Button mLoginBtn;
 
 
     @Override
@@ -50,7 +50,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 });
 
         mEditText = findViewById(R.id.username_text);
-        mRegisterBtn = findViewById(R.id.registerUserBtn);
+        mLoginBtn = findViewById(R.id.loginUserBtn);
 
         mDatabase.getReference().child("users").addChildEventListener(new ChildEventListener() {
             @Override
@@ -84,21 +84,20 @@ public class RegistrationActivity extends AppCompatActivity {
         Intent sendStickerActivity = new Intent(getApplicationContext(), SendStickerActivity.class);
         sendStickerActivity.putExtra("REGISTRATION_TOKEN", REGISTRATION_TOKEN);
 
-        mRegisterBtn.setOnClickListener(new View.OnClickListener() {
+        mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validUsernames.contains(mEditText.getText().toString())) {
-                    Toast.makeText(getApplicationContext(), "Username Already Exists",
-                            Toast.LENGTH_SHORT).show();
-                } else if (mEditText.getText().toString().isEmpty()) {
+                if (mEditText.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Username Cannot be Empty",
                             Toast.LENGTH_SHORT).show();
                 } else {
                     username = mEditText.getText().toString();
+                    if (!validUsernames.contains(username)) {
+                        validUsernames.add(username);
+                        createUser(username, REGISTRATION_TOKEN);
+                    }
                     sendStickerActivity.putExtra("USERNAME", username);
-                    validUsernames.add(username);
                     sendStickerActivity.putExtra("VALID_USERNAMES", (Serializable) validUsernames);
-                    createUser(username, REGISTRATION_TOKEN);
                     startActivity(sendStickerActivity);
                 }
             }

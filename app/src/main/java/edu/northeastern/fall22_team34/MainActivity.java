@@ -12,6 +12,8 @@ import edu.northeastern.fall22_team34.tvshows.activities.TVShowsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Button AboutButton;
+
     private Button TVShowsButton;
     private Button StickerButton;
 
@@ -34,6 +36,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, RegistrationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        AboutButton = findViewById(R.id.AboutButton);
+        AboutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(intent);
             }
         });
