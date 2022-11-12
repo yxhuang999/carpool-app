@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,7 +47,7 @@ public class StickersReceivedActivity extends AppCompatActivity {
         stickerRecyclerView.setHasFixedSize(true);
         stickerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mDatabase.getReference().addValueEventListener(new ValueEventListener() {
+        mDatabase.getReference().child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
@@ -60,7 +61,7 @@ public class StickersReceivedActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(StickersReceivedActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -80,7 +81,10 @@ public class StickersReceivedActivity extends AppCompatActivity {
 
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-
+                if (!committed) {
+                    Toast.makeText(StickersReceivedActivity.this,
+                            "DBError: " + error, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

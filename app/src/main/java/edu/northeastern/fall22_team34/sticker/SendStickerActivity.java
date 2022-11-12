@@ -86,7 +86,6 @@ public class SendStickerActivity extends AppCompatActivity {
     private Map<String, List<Sticker>> stickerReceived = new HashMap<>();
 
 
-
     /* Begin of onCreate */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +115,8 @@ public class SendStickerActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
@@ -125,10 +125,12 @@ public class SendStickerActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
 
         mDatabase.getReference().child("users").child(username).runTransaction(new Transaction.Handler() {
@@ -155,7 +157,12 @@ public class SendStickerActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {}
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                if (!committed) {
+                    Toast.makeText(SendStickerActivity.this,
+                            "DBError: " + error, Toast.LENGTH_SHORT).show();
+                }
+            }
         });
 
         // choose a sticker from local downloads
@@ -230,8 +237,7 @@ public class SendStickerActivity extends AppCompatActivity {
     /* End of onCreate */
 
 
-
-    private void createNotificationChannel() {
+    public void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Sticker Notification";
             String description = "New Sticker Received";
@@ -245,13 +251,14 @@ public class SendStickerActivity extends AppCompatActivity {
         }
     }
 
-    private void sendNotification() {
+    public void sendNotification(Sticker sticker) {
         createNotificationChannel();
 
         NotificationCompat.Builder notifyBuild = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle("New Sticker Sent by ")
-                .setContentText("You Received a New Sticker Sent by ")
+                .setContentTitle("New Sticker From " + sticker.sender)
+                .setContentText("You Received a New Sticker From " + sticker.name + " at "
+                        + sticker.timeSent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
 
@@ -316,7 +323,7 @@ public class SendStickerActivity extends AppCompatActivity {
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
                 if (!committed) {
                     Toast.makeText(SendStickerActivity.this,
-                            "DBError: " + error, Toast.LENGTH_LONG).show();
+                            "DBError: " + error, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -373,7 +380,7 @@ public class SendStickerActivity extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Task<Uri> stickerTask = taskSnapshot.getStorage().getDownloadUrl();
-                while (!stickerTask.isSuccessful());
+                while (!stickerTask.isSuccessful()) ;
                 Uri downloadUri = stickerTask.getResult();
                 Sticker sticker = new Sticker(downloadUri.toString(),
                         imageUri.toString().replaceAll("[^a-zA-Z0-9]", ""),

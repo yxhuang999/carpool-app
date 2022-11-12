@@ -38,6 +38,9 @@ public class StickersSentActivity extends AppCompatActivity {
 
     private RecyclerView stickerSentRecyclerView;
 
+
+
+    /* Start of onCreate */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +57,7 @@ public class StickersSentActivity extends AppCompatActivity {
         stickerSentRecyclerView.setHasFixedSize(true);
         stickerSentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mDatabase.getReference().addValueEventListener(new ValueEventListener() {
+        mDatabase.getReference().child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
@@ -70,7 +73,7 @@ public class StickersSentActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(StickersSentActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -93,11 +96,17 @@ public class StickersSentActivity extends AppCompatActivity {
 
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-
+                if (!committed) {
+                    Toast.makeText(StickersSentActivity.this,
+                            "DBError: " + error, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
+    /* End of onCreate */
 
+
+    // get how many have been sent for each sticker
     private List<Integer> getStickerCount(Map<String, Integer> stickerSent, List<Sticker> stickerList) {
         List<Integer> counts = new ArrayList<>();
         for (int i = 0; i < stickerList.size(); i++) {
