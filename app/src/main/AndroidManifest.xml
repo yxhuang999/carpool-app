@@ -10,6 +10,7 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher_team34"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_team34_round"
@@ -17,6 +18,13 @@
         android:theme="@style/Theme.Fall22_Team34"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".sticker.DisplayLocalStickersActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".AboutActivity"
             android:exported="false">

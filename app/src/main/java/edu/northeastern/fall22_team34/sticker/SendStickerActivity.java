@@ -15,10 +15,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.io.Resources;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,23 +36,21 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.UnaryOperator;
 
 import edu.northeastern.fall22_team34.R;
 import edu.northeastern.fall22_team34.sticker.models.Sticker;
@@ -181,7 +180,7 @@ public class SendStickerActivity extends AppCompatActivity {
                 } else {
                     recipientUsername = recipientText.getText().toString();
                     // select image from download files
-                    openFileSelector();
+                    openStickerSelector();
                 }
             }
         });
@@ -268,20 +267,29 @@ public class SendStickerActivity extends AppCompatActivity {
     }
 
     // choose an image by clicking on it
-    private void openFileSelector() {
+    private void openStickerSelector() {
+        /*
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         SelectImgResultLauncher.launch(intent);
+         */
+
+        Intent intent = new Intent(this, DisplayLocalStickersActivity.class);
+        SelectStickerResultLauncher.launch(intent);
     }
 
     // load selected sticker
-    ActivityResultLauncher<Intent> SelectImgResultLauncher = registerForActivityResult(
+    ActivityResultLauncher<Intent> SelectStickerResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
+                        /*
+                        imageUri = result.getData().getData();
+                        Picasso.get().load(imageUri).into(selectedImgView);
+                         */
                         imageUri = result.getData().getData();
                         Picasso.get().load(imageUri).into(selectedImgView);
                     }
