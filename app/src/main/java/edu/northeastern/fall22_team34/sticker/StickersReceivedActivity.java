@@ -50,7 +50,7 @@ public class StickersReceivedActivity extends AppCompatActivity {
         mDatabase.getReference().child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     if (username.equals(dataSnapshot.getValue(User.class).username)) {
                         stickerReceived = dataSnapshot.getValue(User.class).stickerReceived;
 
@@ -62,29 +62,6 @@ public class StickersReceivedActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(StickersReceivedActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        mDatabase.getReference().child("users").child(username).runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                User user = currentData.getValue(User.class);
-
-                if (user == null) {
-                    return Transaction.success(currentData);
-                }
-                stickerReceived = user.stickerReceived;
-                stickerRecyclerView.setAdapter(new StickerReceivedAdapter(stickerReceived, getApplicationContext()));
-                return Transaction.success(currentData);
-            }
-
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                if (!committed) {
-                    Toast.makeText(StickersReceivedActivity.this,
-                            "DBError: " + error, Toast.LENGTH_SHORT).show();
-                }
             }
         });
     }

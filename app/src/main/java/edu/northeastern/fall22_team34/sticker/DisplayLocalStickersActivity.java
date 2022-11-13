@@ -49,6 +49,8 @@ public class DisplayLocalStickersActivity extends AppCompatActivity implements L
         Intent intent = new Intent();
         Uri uri = Uri.parse("android.resource://edu.northeastern.fall22_team34/drawable/" +
                 getResources().getResourceEntryName(localStickers.get(position)));
+        intent.putExtra("NAME", getResources().getResourceEntryName(localStickers.get(position)));
+        //intent.putExtra("ID", localStickers.get(position));
         intent.setData(uri);
         setResult(RESULT_OK, intent);
         finish();

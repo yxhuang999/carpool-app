@@ -13,8 +13,11 @@ import androidx.core.app.NotificationManagerCompat;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -36,6 +39,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -44,6 +48,7 @@ import com.squareup.picasso.Picasso;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -78,11 +83,15 @@ public class SendStickerActivity extends AppCompatActivity {
     private Button btnImgSent;
 
     private Uri imageUri;
+    private String imageName;
 
     private Map<String, Integer> stickerSent = new HashMap<>();
     private List<Sticker> stickerList = new ArrayList<>();
 
     private Map<String, List<Sticker>> stickerReceived = new HashMap<>();
+
+    private Date createTime = Calendar.getInstance().getTime();
+    private String time;
 
 
     /* Begin of onCreate */
@@ -103,9 +112,14 @@ public class SendStickerActivity extends AppCompatActivity {
         btnImgReceived = findViewById(R.id.btnImgReceived);
         btnImgSent = findViewById(R.id.btnImgSent);
 
+        SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        time = sdformat.format(createTime);
+
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
         mDatabase = FirebaseDatabase.getInstance();
+
+        // listen for new or deleted users
         mDatabase.getReference().child("users").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -132,6 +146,7 @@ public class SendStickerActivity extends AppCompatActivity {
             }
         });
 
+        // update local data
         mDatabase.getReference().child("users").child(username).runTransaction(new Transaction.Handler() {
             @NonNull
             @Override
@@ -163,6 +178,43 @@ public class SendStickerActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // listen for updates of stickers received by the current user
+        mDatabase.getReference().child("users").child(username).child("stickerReceived")
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+                        try {
+                            if (sdformat.parse(snapshot.getValue(Sticker.class).timeSent).compareTo(sdformat.parse(time)) > 0) {
+                                Sticker sticker = snapshot.getValue(Sticker.class);
+                                sendNotification(sticker);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
         // choose a sticker from local downloads
         btnChooseImg.setOnClickListener(new View.OnClickListener() {
@@ -253,13 +305,21 @@ public class SendStickerActivity extends AppCompatActivity {
     public void sendNotification(Sticker sticker) {
         createNotificationChannel();
 
+        Intent intent = new Intent(this, StickersReceivedActivity.class);
+        intent.putExtra("USERNAME", username);
+        intent.putExtra("RECEIVED", (Serializable) stickerReceived.get(username));
+
+        PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+
+        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), );
+
         NotificationCompat.Builder notifyBuild = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle("New Sticker From " + sticker.sender)
-                .setContentText("You Received a New Sticker From " + sticker.name + " at "
-                        + sticker.timeSent)
+                .setContentTitle("New " + sticker.name)
+                .setContentText("You received a new " + sticker.name + " from " + sticker.sender)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true);
+                .setAutoCancel(true)
+                .setContentIntent(pIntent);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(NOTIFICATION_ID, notifyBuild.build());
@@ -286,12 +346,10 @@ public class SendStickerActivity extends AppCompatActivity {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        /*
                         imageUri = result.getData().getData();
                         Picasso.get().load(imageUri).into(selectedImgView);
-                         */
-                        imageUri = result.getData().getData();
-                        Picasso.get().load(imageUri).into(selectedImgView);
+
+                        imageName = result.getData().getStringExtra("NAME");
                     }
                 }
             });
@@ -390,8 +448,7 @@ public class SendStickerActivity extends AppCompatActivity {
                 Task<Uri> stickerTask = taskSnapshot.getStorage().getDownloadUrl();
                 while (!stickerTask.isSuccessful()) ;
                 Uri downloadUri = stickerTask.getResult();
-                Sticker sticker = new Sticker(downloadUri.toString(),
-                        imageUri.toString().replaceAll("[^a-zA-Z0-9]", ""),
+                Sticker sticker = new Sticker(downloadUri.toString(), imageName,
                         username, recipientUsername, timeSent);
 
                 // update sender and recipient in database

@@ -39,7 +39,6 @@ public class StickersSentActivity extends AppCompatActivity {
     private RecyclerView stickerSentRecyclerView;
 
 
-
     /* Start of onCreate */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +59,7 @@ public class StickersSentActivity extends AppCompatActivity {
         mDatabase.getReference().child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     if (username.equals(dataSnapshot.getValue(User.class).username)) {
                         stickerSent = dataSnapshot.getValue(User.class).stickerSent;
                         stickerList = dataSnapshot.getValue(User.class).stickerList;
@@ -74,32 +73,6 @@ public class StickersSentActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(StickersSentActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        mDatabase.getReference().child("users").child(username).runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                User user = currentData.getValue(User.class);
-
-                if (user == null) {
-                    return Transaction.success(currentData);
-                }
-                stickerSent = user.stickerSent;
-                stickerList = user.stickerList;
-
-                countList = getStickerCount(stickerSent, stickerList);
-                stickerSentRecyclerView.setAdapter(new StickerSentAdapter(stickerList, countList, getApplicationContext()));
-                return Transaction.success(currentData);
-            }
-
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                if (!committed) {
-                    Toast.makeText(StickersSentActivity.this,
-                            "DBError: " + error, Toast.LENGTH_SHORT).show();
-                }
             }
         });
     }
