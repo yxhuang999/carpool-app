@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -36,7 +35,7 @@ public class DisplayLocalStickersActivity extends AppCompatActivity implements L
 
         Field[] fields = R.drawable.class.getFields();
         for (int i = 0; i < fields.length; i++) {
-            localStickers.add(getResources().getIdentifier("sticker" + (i+1),
+            localStickers.add(getResources().getIdentifier("sticker" + (i + 1),
                     "drawable", getPackageName()));
         }
 
@@ -50,7 +49,6 @@ public class DisplayLocalStickersActivity extends AppCompatActivity implements L
         Uri uri = Uri.parse("android.resource://edu.northeastern.fall22_team34/drawable/" +
                 getResources().getResourceEntryName(localStickers.get(position)));
         intent.putExtra("NAME", getResources().getResourceEntryName(localStickers.get(position)));
-        //intent.putExtra("ID", localStickers.get(position));
         intent.setData(uri);
         setResult(RESULT_OK, intent);
         finish();
