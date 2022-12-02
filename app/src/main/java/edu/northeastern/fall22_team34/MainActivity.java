@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import edu.northeastern.fall22_team34.carpool.LoginActivity;
 import edu.northeastern.fall22_team34.sticker.RegistrationActivity;
 import edu.northeastern.fall22_team34.tvshows.activities.TVShowsActivity;
 
@@ -16,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button TVShowsButton;
     private Button StickerButton;
+
+    private Button carpoolButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        carpoolButton = findViewById(R.id.btn_carpool);
+        carpoolButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
