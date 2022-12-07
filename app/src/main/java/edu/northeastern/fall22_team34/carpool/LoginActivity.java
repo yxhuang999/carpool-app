@@ -34,13 +34,11 @@ import edu.northeastern.fall22_team34.carpool.models.User;
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseDatabase mDatabase;
-
     private List<String> currUsernames;
+    private Location currLocation;
 
     private LocationManager locationManager;
     private LocationListener locationListener;
-
-    private Location currLocation;
 
 
     @Override
@@ -55,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText usernameEditText = findViewById(R.id.et_username);
         Button loginButton = findViewById(R.id.btn_login);
 
+        // get user's current location
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
@@ -63,15 +62,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
         } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    0, 0, locationListener);
         }
 
         // listen to new users added
@@ -114,7 +115,12 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     String username = usernameEditText.getText().toString();
                     if (!currUsernames.contains(username)) {
-                        createUser(username, currLocation);
+                        if (currLocation != null) {
+                            createUser(username, currLocation);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Location Request Failed",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     Intent homeActivity = new Intent(getApplicationContext(), HomeActivity.class);
@@ -126,6 +132,20 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                        0, 0, locationListener);
+            }
+        }
+    }
+
     // add user to firebase
     private void createUser(String username, Location currLocation) {
         User user = new User(username, currLocation);
@@ -133,20 +153,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            }
-        }
-    }
-
-    @Override
     protected void onDestroy() {
-        super.onDestroy();
         locationManager.removeUpdates(locationListener);
+        super.onDestroy();
     }
 }
