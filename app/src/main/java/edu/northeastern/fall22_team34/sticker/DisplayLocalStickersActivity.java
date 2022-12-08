@@ -24,7 +24,7 @@ public class DisplayLocalStickersActivity extends AppCompatActivity implements L
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_local_stickers);
+        setContentView(R.layout.activity_stickers_display_local_stickers);
 
         localStickerRecyclerView = findViewById(R.id.localStickerRecyclerView);
         localStickerRecyclerView.setHasFixedSize(true);

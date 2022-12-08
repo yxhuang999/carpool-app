@@ -3,6 +3,6 @@
     <string name="username">Username</string>
     <string name="login">Login</string>
     <string name="carpool_project">Carpool Project</string>
-    <string name="carpool_name">CarpoolX</string>
+    <string name="carpool_name">Carpool Login</string>
     <string name="carpool_slogan">On My Way</string>
 </resources>

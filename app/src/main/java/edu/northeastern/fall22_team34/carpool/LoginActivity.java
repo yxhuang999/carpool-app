@@ -24,7 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +33,9 @@ import edu.northeastern.fall22_team34.carpool.models.User;
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseDatabase mDatabase;
+
+    private String username;
+    private Boolean isLoggedIn = false;
     private List<String> currUsernames;
     private Location currLocation;
 
@@ -44,16 +46,23 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_carpool_login);
 
         mDatabase = FirebaseDatabase.getInstance();
 
         currUsernames = new ArrayList<>();
 
-        EditText usernameEditText = findViewById(R.id.et_username);
         Button loginButton = findViewById(R.id.btn_login);
+        EditText usernameEditText = findViewById(R.id.et_username);
 
-        // get user's current location
+        locationInit();
+
+        newUserListener();
+
+        loginListener(loginButton, usernameEditText);
+    }
+
+    private void locationInit() {
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
@@ -74,66 +83,11 @@ public class LoginActivity extends AppCompatActivity {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     0, 0, locationListener);
         }
-
-        // listen to new users added
-        mDatabase.getReference().child("users").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                User user = snapshot.getValue(User.class);
-                currUsernames.add(user.username);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
-                currUsernames.remove(user.username);
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        // create user profile with username and current location
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (usernameEditText.getText().toString().isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Username Cannot be Empty",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    String username = usernameEditText.getText().toString();
-                    if (!currUsernames.contains(username)) {
-                        if (currLocation != null) {
-                            createUser(username, currLocation);
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Location Request Failed",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    Intent homeActivity = new Intent(getApplicationContext(), HomeActivity.class);
-                    homeActivity.putExtra("USERNAME", username);
-                    homeActivity.putExtra("CURR_USERNAMES", (Serializable) currUsernames);
-                    startActivity(homeActivity);
-                }
-            }
-        });
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -144,6 +98,71 @@ public class LoginActivity extends AppCompatActivity {
                         0, 0, locationListener);
             }
         }
+    }
+
+    // listen to new users added
+    private void newUserListener() {
+        mDatabase.getReference().child("users").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot,
+                                     @Nullable String previousChildName) {
+                User user = snapshot.getValue(User.class);
+                currUsernames.add(user.username);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot,
+                                       @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                currUsernames.remove(user.username);
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot,
+                                     @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void loginListener(Button loginButton, EditText usernameEditText) {
+        // create user profile with username and current location
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currLocation == null) {
+                    Toast.makeText(getApplicationContext(), "Cannot Access Current Location",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                username = usernameEditText.getText().toString();
+                if (username.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Username Cannot be Empty",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!currUsernames.contains(username)) {
+                    createUser(username, currLocation);
+                }
+
+                Intent homeActivity = new Intent(getApplicationContext(), HomeActivity.class);
+                homeActivity.putExtra("USERNAME", username);
+                homeActivity.putExtra("CURR_USERNAMES", (Serializable) currUsernames);
+                startActivity(homeActivity);
+            }
+        });
     }
 
     // add user to firebase

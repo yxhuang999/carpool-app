@@ -25,11 +25,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
 
 import edu.northeastern.fall22_team34.R;
 import edu.northeastern.fall22_team34.carpool.models.User;
-import edu.northeastern.fall22_team34.sticker.SendStickerActivity;
 
 public class HomeActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -50,7 +48,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_carpool_home);
 
         mDatabase = FirebaseDatabase.getInstance();
 
@@ -58,58 +56,10 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         googleMapInit(savedInstanceState);
 
-        // set up location listener to update user location
-        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                mDatabase.getReference().child("users").child(username)
-                        .runTransaction(new Transaction.Handler() {
-                    @NonNull
-                    @Override
-                    public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                        User user = currentData.getValue(User.class);
-
-                        if (user != null) {
-                            user.currLat = location.getLatitude();
-                            user.currLong = location.getLongitude();
-
-                            userLocation.setLatitude(location.getLatitude());
-                            userLocation.setLongitude(location.getLongitude());
-
-                            currentData.setValue(user);
-                        }
-                        return Transaction.success(currentData);
-                    }
-
-                    @Override
-                    public void onComplete(@Nullable DatabaseError error, boolean committed,
-                                           @Nullable DataSnapshot currentData) {
-                        if (!committed) {
-                            Toast.makeText(HomeActivity.this,
-                                    "DBError: " + error, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                setCameraView();
-            }
-        };
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
-        } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    0, 0, locationListener);
-        }
+        locationInit();
     }
 
-    // set up google map services
+    // start google map services
     private void googleMapInit(Bundle savedInstanceState) {
         Bundle mapViewBundle = null;
         if (savedInstanceState != null) {
@@ -132,7 +82,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         mGoogleMap = googleMap;
     }
 
-    // fix camera view to current location
+    // set camera view to current location
     private void setCameraView() {
         double bottomBound = userLocation.getLatitude() - 0.1;
         double leftBound = userLocation.getLongitude() - 0.1;
@@ -155,6 +105,58 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         mMapView.onSaveInstanceState(mapViewBundle);
+    }
+
+    // set up location update services
+    private void locationInit() {
+        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                mDatabase.getReference().child("users").child(username)
+                        .runTransaction(new Transaction.Handler() {
+                            @NonNull
+                            @Override
+                            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                                User user = currentData.getValue(User.class);
+
+                                if (user != null) {
+                                    user.currLat = location.getLatitude();
+                                    user.currLong = location.getLongitude();
+
+                                    userLocation.setLatitude(location.getLatitude());
+                                    userLocation.setLongitude(location.getLongitude());
+
+                                    currentData.setValue(user);
+                                }
+                                return Transaction.success(currentData);
+                            }
+
+                            @Override
+                            public void onComplete(@Nullable DatabaseError error, boolean committed,
+                                                   @Nullable DataSnapshot currentData) {
+                                if (!committed) {
+                                    Toast.makeText(HomeActivity.this,
+                                            "DBError: " + error, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                setCameraView();
+            }
+        };
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    0, 0, locationListener);
+        }
     }
 
     @Override

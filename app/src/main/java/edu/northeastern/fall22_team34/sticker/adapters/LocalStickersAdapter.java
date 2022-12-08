@@ -1,7 +1,6 @@
 package edu.northeastern.fall22_team34.sticker.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,7 @@ public class LocalStickersAdapter extends RecyclerView.Adapter<LocalStickersAdap
     @NonNull
     @Override
     public LocalStickerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_container_local_stickers, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_container_stickers_local_stickers, parent, false);
         return new LocalStickerViewHolder(view, onClickListener);
     }
 

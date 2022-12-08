@@ -94,7 +94,7 @@ public class SendStickerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_send_sticker);
+        setContentView(R.layout.activity_stickers_send_sticker);
 
         username = getIntent().getStringExtra("USERNAME");
         validUsernames = (List<String>) getIntent().getSerializableExtra("VALID_USERNAMES");
