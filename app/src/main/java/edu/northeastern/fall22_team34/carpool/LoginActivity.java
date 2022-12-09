@@ -141,7 +141,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (currLocation == null) {
-                    Toast.makeText(getApplicationContext(), "Cannot Access Current Location",
+                    Toast.makeText(getApplicationContext(), "Cannot Access Current Location, " +
+                                    "Please Try Again",
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -159,7 +160,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 Intent homeActivity = new Intent(getApplicationContext(), HomeActivity.class);
                 homeActivity.putExtra("USERNAME", username);
-                homeActivity.putExtra("CURR_USERNAMES", (Serializable) currUsernames);
                 startActivity(homeActivity);
             }
         });
