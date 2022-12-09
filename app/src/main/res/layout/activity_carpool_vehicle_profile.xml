@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".carpool.DriverProfileActivity">
+    tools:context=".carpool.VehicleProfileActivity">
 
     <TextView
-        android:id="@+id/dr_profile_head"
+        android:id="@+id/vh_profile_head"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_14sdp"
-        android:text="Driver Profile"
+        android:text="Vehicle Profile"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_24sdp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,19 +20,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/dr_profile_phone_number"
+        android:id="@+id/vh_profile_plate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_14sdp"
         android:layout_marginTop="@dimen/_80sdp"
-        android:text="Phone#"
+        android:text="Plate"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_16sdp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dr_profile_head" />
+        app:layout_constraintTop_toBottomOf="@id/vh_profile_head" />
 
     <EditText
-        android:id="@+id/dr_et_phone"
+        android:id="@+id/vh_et_plate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_24sdp"
@@ -44,23 +44,23 @@
         android:textColor="@color/colorTextIcons"
         android:textColorHint="@color/colorTextSecondary"
         android:textSize="@dimen/_13ssp"
-        app:layout_constraintStart_toEndOf="@id/dr_profile_phone_number"
-        app:layout_constraintTop_toBottomOf="@id/dr_profile_head" />
+        app:layout_constraintStart_toEndOf="@id/vh_profile_plate"
+        app:layout_constraintTop_toBottomOf="@id/vh_profile_head" />
 
     <TextView
-        android:id="@+id/dr_profile_license"
+        android:id="@+id/vh_profile_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_14sdp"
         android:layout_marginTop="@dimen/_80sdp"
-        android:text="License#"
+        android:text="Color"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_16sdp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dr_profile_phone_number" />
+        app:layout_constraintTop_toBottomOf="@id/vh_profile_plate" />
 
     <EditText
-        android:id="@+id/dr_et_license"
+        android:id="@+id/vh_et_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_16sdp"
@@ -72,40 +72,40 @@
         android:textColor="@color/colorTextIcons"
         android:textColorHint="@color/colorTextSecondary"
         android:textSize="@dimen/_13ssp"
-        app:layout_constraintStart_toEndOf="@id/dr_profile_license"
-        app:layout_constraintTop_toBottomOf="@id/dr_profile_phone_number" />
+        app:layout_constraintStart_toEndOf="@id/vh_profile_color"
+        app:layout_constraintTop_toBottomOf="@id/vh_profile_plate" />
 
     <TextView
-        android:id="@+id/dr_profile_name"
+        android:id="@+id/vh_profile_seat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_14sdp"
         android:layout_marginTop="@dimen/_80sdp"
-        android:text="Preferred Name"
+        android:text="Seat"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_16sdp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dr_profile_license" />
+        app:layout_constraintTop_toBottomOf="@id/vh_profile_color" />
 
     <EditText
-        android:id="@+id/dr_et_name"
+        android:id="@+id/vh_et_seat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_72sdp"
         android:backgroundTint="@color/white"
-        android:ems="9"
+        android:ems="12"
         android:importantForAutofill="no"
         android:inputType="text"
         android:textColor="@color/colorTextIcons"
         android:textColorHint="@color/colorTextSecondary"
         android:textSize="@dimen/_13ssp"
-        app:layout_constraintStart_toEndOf="@id/dr_profile_name"
-        app:layout_constraintTop_toBottomOf="@id/dr_profile_license" />
+        app:layout_constraintStart_toEndOf="@id/vh_profile_seat"
+        app:layout_constraintTop_toBottomOf="@id/vh_profile_color" />
 
 
     <Button
-        android:id="@+id/btn_save"
+        android:id="@+id/vh_btn_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_80sdp"
@@ -114,6 +114,6 @@
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dr_profile_name" />
+        app:layout_constraintTop_toBottomOf="@id/vh_profile_seat" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

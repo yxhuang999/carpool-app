@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".carpool.DriverProfileActivity">
+    tools:context=".carpool.PassengerProfileActivity">
 
     <TextView
-        android:id="@+id/dr_profile_head"
+        android:id="@+id/psg_profile_head"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_14sdp"
-        android:text="Driver Profile"
+        android:text="Passenger Profile"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_24sdp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/dr_profile_phone_number"
+        android:id="@+id/psg_profile_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_14sdp"
@@ -29,38 +29,10 @@
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_16sdp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dr_profile_head" />
+        app:layout_constraintTop_toBottomOf="@id/psg_profile_head" />
 
     <EditText
-        android:id="@+id/dr_et_phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_24sdp"
-        android:layout_marginTop="@dimen/_72sdp"
-        android:backgroundTint="@color/white"
-        android:ems="12"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:textColor="@color/colorTextIcons"
-        android:textColorHint="@color/colorTextSecondary"
-        android:textSize="@dimen/_13ssp"
-        app:layout_constraintStart_toEndOf="@id/dr_profile_phone_number"
-        app:layout_constraintTop_toBottomOf="@id/dr_profile_head" />
-
-    <TextView
-        android:id="@+id/dr_profile_license"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_14sdp"
-        android:layout_marginTop="@dimen/_80sdp"
-        android:text="License#"
-        android:textColor="@color/colorTextPrimary"
-        android:textSize="@dimen/_16sdp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dr_profile_phone_number" />
-
-    <EditText
-        android:id="@+id/dr_et_license"
+        android:id="@+id/psg_et_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_16sdp"
@@ -72,11 +44,11 @@
         android:textColor="@color/colorTextIcons"
         android:textColorHint="@color/colorTextSecondary"
         android:textSize="@dimen/_13ssp"
-        app:layout_constraintStart_toEndOf="@id/dr_profile_license"
-        app:layout_constraintTop_toBottomOf="@id/dr_profile_phone_number" />
+        app:layout_constraintStart_toEndOf="@id/psg_profile_phone"
+        app:layout_constraintTop_toBottomOf="@id/psg_profile_head" />
 
     <TextView
-        android:id="@+id/dr_profile_name"
+        android:id="@+id/psg_profile_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_14sdp"
@@ -85,10 +57,10 @@
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_16sdp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dr_profile_license" />
+        app:layout_constraintTop_toBottomOf="@id/psg_profile_phone" />
 
     <EditText
-        android:id="@+id/dr_et_name"
+        android:id="@+id/psg_et_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_16sdp"
@@ -100,12 +72,11 @@
         android:textColor="@color/colorTextIcons"
         android:textColorHint="@color/colorTextSecondary"
         android:textSize="@dimen/_13ssp"
-        app:layout_constraintStart_toEndOf="@id/dr_profile_name"
-        app:layout_constraintTop_toBottomOf="@id/dr_profile_license" />
-
+        app:layout_constraintStart_toEndOf="@id/psg_profile_name"
+        app:layout_constraintTop_toBottomOf="@id/psg_profile_phone" />
 
     <Button
-        android:id="@+id/btn_save"
+        android:id="@+id/psg_btn_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_80sdp"
@@ -114,6 +85,7 @@
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dr_profile_name" />
+        app:layout_constraintTop_toBottomOf="@id/psg_profile_name" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

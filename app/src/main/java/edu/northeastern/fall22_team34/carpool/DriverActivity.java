@@ -29,5 +29,15 @@ public class DriverActivity extends AppCompatActivity {
                 startActivity(profileIntent);
             }
         });
+
+        Button vhProfileButton = findViewById(R.id.vehicle_profile);
+        vhProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent vhProfileIntent = new Intent(getApplicationContext(), VehicleProfileActivity.class);
+                vhProfileIntent.putExtra("USERNAME", username);
+                startActivity(vhProfileIntent);
+            }
+        });
     }
 }

@@ -12,6 +12,7 @@ public class User implements java.io.Serializable {
     public double currLat;
     public double currLong;
     public Driver driverProfile;
+    public Vehicle vehicleProfile;
     public Passenger passengerProfile;
 
 

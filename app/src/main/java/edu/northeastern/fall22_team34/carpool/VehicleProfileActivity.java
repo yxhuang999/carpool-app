@@ -17,33 +17,32 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
-
 import edu.northeastern.fall22_team34.R;
-import edu.northeastern.fall22_team34.carpool.models.Driver;
 import edu.northeastern.fall22_team34.carpool.models.User;
+import edu.northeastern.fall22_team34.carpool.models.Vehicle;
 
-public class DriverProfileActivity extends AppCompatActivity {
+public class VehicleProfileActivity extends AppCompatActivity {
 
     private FirebaseDatabase mDatabase;
 
     private String username;
 
-    private String phoneNumber;
-    private String licenseNumber;
-    private String prefName;
+    private String plate;
+    private String color;
+    private int seat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_carpool_driver_profile);
+        setContentView(R.layout.activity_carpool_vehicle_profile);
 
         mDatabase = FirebaseDatabase.getInstance();
 
         username = getIntent().getStringExtra("USERNAME");
 
-        EditText phone = findViewById(R.id.dr_et_phone);
-        EditText license = findViewById(R.id.dr_et_license);
-        EditText name = findViewById(R.id.dr_et_name);
+        EditText plateET = findViewById(R.id.vh_et_plate);
+        EditText colorET = findViewById(R.id.vh_et_color);
+        EditText seatET = findViewById(R.id.vh_et_seat);
 
         mDatabase.getReference().child("users").addValueEventListener(new ValueEventListener() {
             @Override
@@ -51,10 +50,10 @@ public class DriverProfileActivity extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     if (username.equals(dataSnapshot.getValue(User.class).username)) {
                         User user = dataSnapshot.getValue(User.class);
-                        if (user.driverProfile != null) {
-                            phone.setText(user.driverProfile.phoneNumber);
-                            license.setText(user.driverProfile.license);
-                            name.setText(user.driverProfile.prefName);
+                        if (user.driverProfile != null && user.vehicleProfile != null) {
+                            plateET.setText(user.vehicleProfile.plate);
+                            colorET.setText(user.vehicleProfile.color);
+                            seatET.setText(user.vehicleProfile.seat);
                         }
                     }
                 }
@@ -62,19 +61,19 @@ public class DriverProfileActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(DriverProfileActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(VehicleProfileActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
-        Button saveButton = findViewById(R.id.btn_save);
+        Button saveButton = findViewById(R.id.vh_btn_save);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                phoneNumber = phone.getText().toString();
-                licenseNumber = license.getText().toString();
-                prefName = name.getText().toString();
+                plate = plateET.getText().toString();
+                color = colorET.getText().toString();
+                seat = Integer.parseInt(seatET.getText().toString());
 
-                if (phoneNumber.isEmpty() || licenseNumber.isEmpty() || prefName.isEmpty()) {
+                if (plate.isEmpty() || color.isEmpty() || seatET.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(),
                             "Please Fill Up All Fields", Toast.LENGTH_SHORT).show();
                 } else {
@@ -84,7 +83,7 @@ public class DriverProfileActivity extends AppCompatActivity {
                             uploadProfile();
                         }
                     }).start();
-                    Toast.makeText(DriverProfileActivity.this,
+                    Toast.makeText(VehicleProfileActivity.this,
                             "Your Profile is Updated", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -99,8 +98,8 @@ public class DriverProfileActivity extends AppCompatActivity {
                     public Transaction.Result doTransaction(@NonNull MutableData currentData) {
                         User user = currentData.getValue(User.class);
                         if (user != null) {
-                            Driver driver = new Driver(phoneNumber, licenseNumber, prefName);
-                            user.driverProfile = driver;
+                            Vehicle vehicle = new Vehicle(plate, color, seat);
+                            user.vehicleProfile = vehicle;
 
                             currentData.setValue(user);
                         }
@@ -110,7 +109,7 @@ public class DriverProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@Nullable DatabaseError error, boolean committed,
                                            @Nullable DataSnapshot currentData) {
-                        Toast.makeText(DriverProfileActivity.this,
+                        Toast.makeText(VehicleProfileActivity.this,
                                 "DBError: " + error, Toast.LENGTH_SHORT).show();
                     }
                 });

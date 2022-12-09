@@ -70,6 +70,16 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(driverActivity);
             }
         });
+
+        Button passengerButton = findViewById(R.id.btn_passenger);
+        passengerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent passengerActivity = new Intent(getApplicationContext(), PassengerActivity.class);
+                passengerActivity.putExtra("USERNAME", username);
+                startActivity(passengerActivity);
+            }
+        });
     }
 
     // start google map services
