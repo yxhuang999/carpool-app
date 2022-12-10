@@ -62,7 +62,8 @@ public class DriverProfileActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(DriverProfileActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(DriverProfileActivity.this, error.getMessage(),
+                        Toast.LENGTH_SHORT).show();
             }
         });
 

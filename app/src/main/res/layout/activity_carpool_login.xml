@@ -11,25 +11,26 @@
         android:id="@+id/tv_appName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
         android:text="@string/carpool_name"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_24sdp"
+        app:layout_constraintBottom_toTopOf="@id/iv_loginLogo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/iv_loginLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:adjustViewBounds="true"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toTopOf="@id/et_username"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_appName"
+        app:layout_constraintTop_toBottomOf="@id/tv_appName"
         app:srcCompat="@drawable/login_logo" />
 
     <EditText
@@ -37,6 +38,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_32sdp"
         android:backgroundTint="@color/white"
         android:ems="12"
         android:hint="@string/username"
@@ -44,16 +47,17 @@
         android:inputType="text"
         android:textColor="@color/colorTextIcons"
         android:textColorHint="@color/colorTextSecondary"
-        android:textSize="@dimen/_13ssp"
+        android:textSize="@dimen/_14ssp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_login"
         app:layout_constraintTop_toBottomOf="@id/iv_loginLogo" />
 
     <Button
         android:id="@+id/btn_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="344dp"
+        android:layout_marginEnd="@dimen/_24sdp"
         android:backgroundTint="@color/colorTextIcons"
         android:text="@string/login"
         android:textColor="@color/colorPrimaryDark"

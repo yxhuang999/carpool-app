@@ -39,5 +39,15 @@ public class DriverActivity extends AppCompatActivity {
                 startActivity(vhProfileIntent);
             }
         });
+
+        Button newRideButton = findViewById(R.id.driver_new_ride);
+        newRideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent newRideIntent = new Intent(getApplicationContext(), NewRideActivity.class);
+                newRideIntent.putExtra("USERNAME", username);
+                startActivity(newRideIntent);
+            }
+        });
     }
 }

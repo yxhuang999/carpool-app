@@ -17,26 +17,27 @@
         android:textSize="@dimen/_24sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/vh_profile_plate"/>
 
     <TextView
         android:id="@+id/vh_profile_plate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_14sdp"
-        android:layout_marginTop="@dimen/_80sdp"
         android:text="Plate"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_16sdp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vh_profile_head" />
+        app:layout_constraintEnd_toStartOf="@id/vh_et_plate"
+        app:layout_constraintTop_toBottomOf="@id/vh_profile_head"
+        app:layout_constraintBottom_toTopOf="@id/vh_profile_color"/>
 
     <EditText
         android:id="@+id/vh_et_plate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_24sdp"
-        android:layout_marginTop="@dimen/_72sdp"
         android:backgroundTint="@color/white"
         android:ems="12"
         android:importantForAutofill="no"
@@ -45,18 +46,19 @@
         android:textColorHint="@color/colorTextSecondary"
         android:textSize="@dimen/_13ssp"
         app:layout_constraintStart_toEndOf="@id/vh_profile_plate"
-        app:layout_constraintTop_toBottomOf="@id/vh_profile_head" />
+        app:layout_constraintBaseline_toBaselineOf="@id/vh_profile_plate" />
 
     <TextView
         android:id="@+id/vh_profile_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_14sdp"
-        android:layout_marginTop="@dimen/_80sdp"
         android:text="Color"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_16sdp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/vh_et_color"
+        app:layout_constraintBottom_toTopOf="@id/vh_profile_seat"
         app:layout_constraintTop_toBottomOf="@id/vh_profile_plate" />
 
     <EditText
@@ -64,7 +66,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_72sdp"
         android:backgroundTint="@color/white"
         android:ems="12"
         android:importantForAutofill="no"
@@ -73,18 +74,19 @@
         android:textColorHint="@color/colorTextSecondary"
         android:textSize="@dimen/_13ssp"
         app:layout_constraintStart_toEndOf="@id/vh_profile_color"
-        app:layout_constraintTop_toBottomOf="@id/vh_profile_plate" />
+        app:layout_constraintBaseline_toBaselineOf="@id/vh_profile_color" />
 
     <TextView
         android:id="@+id/vh_profile_seat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_14sdp"
-        android:layout_marginTop="@dimen/_80sdp"
         android:text="Seat"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_16sdp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/vh_et_seat"
+        app:layout_constraintBottom_toTopOf="@id/vh_btn_save"
         app:layout_constraintTop_toBottomOf="@id/vh_profile_color" />
 
     <EditText
@@ -92,7 +94,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_72sdp"
         android:backgroundTint="@color/white"
         android:ems="12"
         android:importantForAutofill="no"
@@ -101,19 +102,19 @@
         android:textColorHint="@color/colorTextSecondary"
         android:textSize="@dimen/_13ssp"
         app:layout_constraintStart_toEndOf="@id/vh_profile_seat"
-        app:layout_constraintTop_toBottomOf="@id/vh_profile_color" />
+        app:layout_constraintBaseline_toBaselineOf="@id/vh_profile_seat" />
 
 
     <Button
         android:id="@+id/vh_btn_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_80sdp"
         android:backgroundTint="@color/colorTextIcons"
         android:text="Save"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vh_profile_seat" />
+        app:layout_constraintTop_toBottomOf="@id/vh_profile_seat"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

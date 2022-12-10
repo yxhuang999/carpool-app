@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/_200sdp"
+        android:layout_marginBottom="@dimen/_140sdp"
         android:text="How Can I Help You Today?"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_16sdp" />
