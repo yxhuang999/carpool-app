@@ -111,8 +111,10 @@ public class DriverProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@Nullable DatabaseError error, boolean committed,
                                            @Nullable DataSnapshot currentData) {
-                        Toast.makeText(DriverProfileActivity.this,
-                                "DBError: " + error, Toast.LENGTH_SHORT).show();
+                        if (!committed) {
+                            Toast.makeText(DriverProfileActivity.this,
+                                    "DBError: " + error, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
     }

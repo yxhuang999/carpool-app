@@ -30,7 +30,7 @@ public class StickerReceivedAdapter extends RecyclerView.Adapter<StickerReceived
     @NonNull
     @Override
     public StickerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_container_sticker_received, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_container_stickers_received, parent, false);
         return new StickerViewHolder(view);
     }
 

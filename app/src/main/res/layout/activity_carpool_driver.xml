@@ -7,6 +7,18 @@
     android:background="@color/colorPrimary"
     tools:context=".carpool.DriverActivity">
 
+    <TextView
+        android:id="@+id/driver_head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Driver Home"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="@dimen/_24sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/driver_profile"/>
+
     <Button
         android:id="@+id/driver_profile"
         android:layout_width="wrap_content"
@@ -17,7 +29,7 @@
         app:layout_constraintBottom_toTopOf="@id/vehicle_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/driver_head" />
 
     <Button
         android:id="@+id/vehicle_profile"
@@ -26,17 +38,17 @@
         android:backgroundTint="@color/colorTextIcons"
         android:text="Vehicle Profile"
         android:textColor="@color/colorPrimaryDark"
-        app:layout_constraintBottom_toTopOf="@id/driver_new_ride"
+        app:layout_constraintBottom_toTopOf="@id/driver_new_trip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/driver_profile" />
 
     <Button
-        android:id="@+id/driver_new_ride"
+        android:id="@+id/driver_new_trip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorTextIcons"
-        android:text="Schedule a New Ride"
+        android:text="New Trip"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toTopOf="@id/driver_history"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,10 +60,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorTextIcons"
-        android:text="Ride History"
+        android:text="Published Trips"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/driver_new_ride" />
+        app:layout_constraintTop_toBottomOf="@id/driver_new_trip" />
 </androidx.constraintlayout.widget.ConstraintLayout>

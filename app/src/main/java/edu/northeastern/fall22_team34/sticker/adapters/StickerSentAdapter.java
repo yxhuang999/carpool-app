@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-import java.util.Map;
 
 import edu.northeastern.fall22_team34.R;
 import edu.northeastern.fall22_team34.sticker.models.Sticker;
@@ -34,7 +32,7 @@ public class StickerSentAdapter extends RecyclerView.Adapter<StickerSentAdapter.
     @NonNull
     @Override
     public StickerSentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_container_sticker_sent, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_container_stickers_sent, parent, false);
         return new StickerSentAdapter.StickerSentViewHolder(view);
     }
 

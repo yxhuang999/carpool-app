@@ -1,8 +1,9 @@
 package edu.northeastern.fall22_team34.carpool.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Ride {
+public class Trip implements java.io.Serializable {
 
     public String id;
     public User driver;
@@ -14,14 +15,15 @@ public class Ride {
     public String duration;
     public String time;
 
-    public Ride() {
+    public Trip() {
 
     }
 
-    public Ride(String id, User driver, double startLat, double startLong, double endLat, double endLong, String duration,
-                String time) {
+    public Trip(String id, User driver, double startLat, double startLong, double endLat,
+                double endLong, String duration, String time) {
         this.id = id;
         this.driver = driver;
+        this.passenger = new ArrayList<>();
         this.startLat = startLat;
         this.startLong = startLong;
         this.endLat = endLat;

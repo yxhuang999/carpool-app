@@ -32,15 +32,16 @@ import com.google.maps.PendingResult;
 import com.google.maps.model.DirectionsResult;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
 import edu.northeastern.fall22_team34.R;
-import edu.northeastern.fall22_team34.carpool.models.Ride;
+import edu.northeastern.fall22_team34.carpool.models.Trip;
 import edu.northeastern.fall22_team34.carpool.models.User;
 
-public class NewRideActivity extends AppCompatActivity {
+public class DriverNewTripActivity extends AppCompatActivity {
 
     private FirebaseDatabase mDatabase;
     private String username;
@@ -54,7 +55,7 @@ public class NewRideActivity extends AppCompatActivity {
     private List<Address> addresses;
     private String currAddress;
     private Address destAddress;
-    private String rideDuration;
+    private String tripDuration;
 
     private EditText from;
     private EditText destination;
@@ -65,16 +66,16 @@ public class NewRideActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_carpool_new_ride);
+        setContentView(R.layout.activity_carpool_driver_new_trip);
 
         mDatabase = FirebaseDatabase.getInstance();
 
         username = getIntent().getStringExtra("USERNAME");
 
-        from = findViewById(R.id.new_ride_et_from);
-        destination = findViewById(R.id.new_ride_et_dest);
-        duration = findViewById(R.id.new_ride_et_duration);
-        time = findViewById(R.id.new_ride_et_time);
+        from = findViewById(R.id.new_trip_et_from);
+        destination = findViewById(R.id.new_trip_et_dest);
+        duration = findViewById(R.id.new_trip_et_duration);
+        time = findViewById(R.id.new_trip_et_time);
 
         durationInit();
 
@@ -100,14 +101,14 @@ public class NewRideActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(NewRideActivity.this, error.getMessage(),
+                Toast.makeText(DriverNewTripActivity.this, error.getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
         });
 
         onDestinationEntered();
 
-        onRideSubmit();
+        onTripSubmit();
     }
 
     private void durationInit() {
@@ -136,11 +137,11 @@ public class NewRideActivity extends AppCompatActivity {
         directions.destination(destination).setCallback(new PendingResult.Callback<DirectionsResult>() {
             @Override
             public void onResult(DirectionsResult result) {
-                rideDuration = result.routes[0].legs[0].duration.humanReadable;
+                tripDuration = result.routes[0].legs[0].duration.humanReadable;
 
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        duration.setText(rideDuration);
+                        duration.setText(tripDuration);
                     }
                 });
             }
@@ -190,7 +191,7 @@ public class NewRideActivity extends AppCompatActivity {
                             public void onComplete(@Nullable DatabaseError error, boolean committed,
                                                    @Nullable DataSnapshot currentData) {
                                 if (!committed) {
-                                    Toast.makeText(NewRideActivity.this,
+                                    Toast.makeText(DriverNewTripActivity.this,
                                             "DBError: " + error, Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -246,45 +247,57 @@ public class NewRideActivity extends AppCompatActivity {
         });
     }
 
-    private void onRideSubmit() {
-        Button rideSubmit = findViewById(R.id.btn_submit_ride);
+    private void onTripSubmit() {
+        Button rideSubmit = findViewById(R.id.btn_submit_trip);
         rideSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (destination.getText().toString().isEmpty()
                         || time.getText().toString().isEmpty()) {
-                    Toast.makeText(NewRideActivity.this,
-                            "Please Provide All Necessary Information For This Ride",
+                    Toast.makeText(DriverNewTripActivity.this,
+                            "Please Provide All Necessary Information For This Trip",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    mDatabase.getReference().child("users").child(username)
-                            .runTransaction(new Transaction.Handler() {
-                        @NonNull
+                    new Thread(new Runnable() {
                         @Override
-                        public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                            User user = currentData.getValue(User.class);
-
-                            String uniqueID = UUID.randomUUID().toString();
-                            Ride ride = new Ride(uniqueID, user, userLocation.getLatitude(),
-                                    userLocation.getLongitude(), destAddress.getLatitude(),
-                                    destAddress.getLongitude(), rideDuration, time.getText().toString());
-
-                            mDatabase.getReference().child("rides").child(uniqueID).setValue(ride);
-
-                            return Transaction.success(currentData);
+                        public void run() {
+                            uploadTrip();
                         }
-
-                        @Override
-                        public void onComplete(@Nullable DatabaseError error,
-                                               boolean committed, @Nullable DataSnapshot currentData) {
-                            if (!committed) {
-                                Toast.makeText(NewRideActivity.this,
-                                        "DBError: " + error, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                    }).start();
+                    Toast.makeText(DriverNewTripActivity.this,
+                            "Successfully Submitted", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
         });
+    }
+
+    private void uploadTrip() {
+        mDatabase.getReference().child("users").child(username)
+                .runTransaction(new Transaction.Handler() {
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                        User user = currentData.getValue(User.class);
+
+                        String uniqueID = UUID.randomUUID().toString();
+                        Trip trip = new Trip(uniqueID, user, userLocation.getLatitude(),
+                                userLocation.getLongitude(), destAddress.getLatitude(),
+                                destAddress.getLongitude(), tripDuration, time.getText().toString());
+
+                        mDatabase.getReference().child("trips").child(uniqueID).setValue(trip);
+
+                        return Transaction.success(currentData);
+                    }
+
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error,
+                                           boolean committed, @Nullable DataSnapshot currentData) {
+                        if (!committed) {
+                            Toast.makeText(DriverNewTripActivity.this,
+                                    "DBError: " + error, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }

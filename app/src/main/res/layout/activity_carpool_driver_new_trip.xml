@@ -5,34 +5,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".carpool.NewRideActivity">
+    tools:context=".carpool.DriverNewTripActivity">
 
     <TextView
-        android:id="@+id/new_ride_head"
+        android:id="@+id/new_trip_head"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit a New Ride"
+        android:text="Create a New Trip"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_24sdp"
-        app:layout_constraintBottom_toTopOf="@id/new_ride_from"
+        app:layout_constraintBottom_toTopOf="@id/new_trip_from"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/new_ride_from"
+        android:id="@+id/new_trip_from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="From"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_16sdp"
-        app:layout_constraintBottom_toTopOf="@id/new_ride_dest"
-        app:layout_constraintEnd_toStartOf="@id/new_ride_et_from"
+        app:layout_constraintBottom_toTopOf="@id/new_trip_dest"
+        app:layout_constraintEnd_toStartOf="@id/new_trip_et_from"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_ride_head" />
+        app:layout_constraintTop_toBottomOf="@id/new_trip_head" />
 
     <EditText
-        android:id="@+id/new_ride_et_from"
+        android:id="@+id/new_trip_et_from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
@@ -42,24 +42,24 @@
         android:textColor="@color/colorTextIcons"
         android:textColorHint="@color/colorTextSecondary"
         android:textSize="@dimen/_12ssp"
-        app:layout_constraintBaseline_toBaselineOf="@id/new_ride_from"
+        app:layout_constraintBaseline_toBaselineOf="@id/new_trip_from"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/new_ride_from" />
+        app:layout_constraintStart_toEndOf="@id/new_trip_from" />
 
     <TextView
-        android:id="@+id/new_ride_dest"
+        android:id="@+id/new_trip_dest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="To"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_16sdp"
-        app:layout_constraintBottom_toTopOf="@id/new_ride_duration"
-        app:layout_constraintEnd_toStartOf="@id/new_ride_et_dest"
+        app:layout_constraintBottom_toTopOf="@id/new_trip_duration"
+        app:layout_constraintEnd_toStartOf="@id/new_trip_et_dest"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_ride_from" />
+        app:layout_constraintTop_toBottomOf="@id/new_trip_from" />
 
     <EditText
-        android:id="@+id/new_ride_et_dest"
+        android:id="@+id/new_trip_et_dest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
@@ -69,47 +69,47 @@
         android:textColor="@color/colorTextIcons"
         android:textColorHint="@color/colorTextSecondary"
         android:textSize="@dimen/_12ssp"
-        app:layout_constraintBaseline_toBaselineOf="@id/new_ride_dest"
+        app:layout_constraintBaseline_toBaselineOf="@id/new_trip_dest"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/new_ride_dest" />
+        app:layout_constraintStart_toEndOf="@id/new_trip_dest" />
 
     <TextView
-        android:id="@+id/new_ride_duration"
+        android:id="@+id/new_trip_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Trip Duration:"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_16sdp"
-        app:layout_constraintBottom_toTopOf="@id/new_ride_time"
-        app:layout_constraintEnd_toStartOf="@id/new_ride_et_duration"
+        app:layout_constraintBottom_toTopOf="@id/new_trip_time"
+        app:layout_constraintEnd_toStartOf="@id/new_trip_et_duration"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_ride_dest" />
+        app:layout_constraintTop_toBottomOf="@id/new_trip_dest" />
 
     <TextView
-        android:id="@+id/new_ride_et_duration"
+        android:id="@+id/new_trip_et_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorTextPrimary"
         android:text=""
         android:textSize="@dimen/_16ssp"
-        app:layout_constraintBaseline_toBaselineOf="@id/new_ride_duration"
+        app:layout_constraintBaseline_toBaselineOf="@id/new_trip_duration"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/new_ride_duration" />
+        app:layout_constraintStart_toEndOf="@id/new_trip_duration" />
 
     <TextView
-        android:id="@+id/new_ride_time"
+        android:id="@+id/new_trip_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start Time"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_16sdp"
-        app:layout_constraintBottom_toTopOf="@id/btn_submit_ride"
-        app:layout_constraintEnd_toStartOf="@id/new_ride_et_time"
+        app:layout_constraintBottom_toTopOf="@id/btn_submit_trip"
+        app:layout_constraintEnd_toStartOf="@id/new_trip_et_time"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_ride_duration" />
+        app:layout_constraintTop_toBottomOf="@id/new_trip_duration" />
 
     <EditText
-        android:id="@+id/new_ride_et_time"
+        android:id="@+id/new_trip_et_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
@@ -119,12 +119,12 @@
         android:textColor="@color/colorTextIcons"
         android:textColorHint="@color/colorTextSecondary"
         android:textSize="@dimen/_12ssp"
-        app:layout_constraintBaseline_toBaselineOf="@id/new_ride_time"
+        app:layout_constraintBaseline_toBaselineOf="@id/new_trip_time"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/new_ride_time" />
+        app:layout_constraintStart_toEndOf="@id/new_trip_time" />
 
     <Button
-        android:id="@+id/btn_submit_ride"
+        android:id="@+id/btn_submit_trip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorTextIcons"
@@ -133,6 +133,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_ride_time" />
+        app:layout_constraintTop_toBottomOf="@id/new_trip_time" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
