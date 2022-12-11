@@ -5,4 +5,12 @@
     <string name="carpool_project">Carpool Project</string>
     <string name="carpool_name">Carpool Login</string>
     <string name="carpool_slogan">On My Way</string>
+    <string-array name="nearbyTrip_distance">
+        <item>4000</item>
+        <item>5000</item>
+        <item>6000</item>
+        <item>7000</item>
+        <item>8000</item>
+        <item>9000</item>
+    </string-array>
 </resources>

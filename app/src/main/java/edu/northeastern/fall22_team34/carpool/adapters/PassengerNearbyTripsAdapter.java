@@ -17,32 +17,38 @@ import java.util.List;
 import java.util.Locale;
 
 import edu.northeastern.fall22_team34.R;
+import edu.northeastern.fall22_team34.carpool.OnJoinClicklistener;
 import edu.northeastern.fall22_team34.carpool.models.Trip;
 
-public class DriverTripAdapter extends RecyclerView.Adapter<DriverTripAdapter.DriverTripViewHolder> {
+public class PassengerNearbyTripsAdapter extends
+        RecyclerView.Adapter<PassengerNearbyTripsAdapter.PsgNearbyTripsViewHolder> {
 
     private List<Trip> trips;
     private Context context;
 
     private Geocoder mGeocoder;
 
-    public DriverTripAdapter(List<Trip> trips, Context context) {
+    private OnJoinClicklistener onJoinClicklistener;
+
+    public PassengerNearbyTripsAdapter(List<Trip> trips, Context context,
+                                       OnJoinClicklistener onJoinClicklistener) {
         this.trips = trips;
         this.context = context;
+        this.onJoinClicklistener = onJoinClicklistener;
 
         mGeocoder = new Geocoder(context, Locale.getDefault());
     }
 
     @NonNull
     @Override
-    public DriverTripViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_container_carpool_driver_trip,
-                parent, false);
-        return new DriverTripAdapter.DriverTripViewHolder(view);
+    public PsgNearbyTripsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(
+                R.layout.item_container_carpool_psg_nearby_trips, parent, false);
+        return new PassengerNearbyTripsAdapter.PsgNearbyTripsViewHolder(view, onJoinClicklistener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DriverTripViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PsgNearbyTripsViewHolder holder, int position) {
         if (trips != null) {
             Trip trip = trips.get(position);
             try {
@@ -81,19 +87,31 @@ public class DriverTripAdapter extends RecyclerView.Adapter<DriverTripAdapter.Dr
         }
     }
 
-    static class DriverTripViewHolder extends RecyclerView.ViewHolder {
+    static class PsgNearbyTripsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView from;
         public TextView dest;
         public TextView startTime;
         public TextView passengerNum;
+        public Button joinBtn;
 
-        public DriverTripViewHolder(@NonNull View itemView) {
+        public OnJoinClicklistener onJoinClicklistener;
+
+        public PsgNearbyTripsViewHolder(@NonNull View itemView, OnJoinClicklistener onJoinClicklistener) {
             super(itemView);
-            this.from = itemView.findViewById(R.id.driver_tripFrom);
-            this.dest = itemView.findViewById(R.id.driver_tripTo);
-            this.startTime = itemView.findViewById(R.id.driver_tripTime);
-            this.passengerNum = itemView.findViewById(R.id.driver_tripPassenger);
+            this.from = itemView.findViewById(R.id.psg_tripFrom);
+            this.dest = itemView.findViewById(R.id.psg_tripTo);
+            this.startTime = itemView.findViewById(R.id.psg_tripTime);
+            this.passengerNum = itemView.findViewById(R.id.psg_tripPassenger);
+            this.joinBtn = itemView.findViewById(R.id.psg_trip_join_btn);
+            this.onJoinClicklistener = onJoinClicklistener;
+
+            joinBtn.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onJoinClicklistener.onJoinClick(getAbsoluteAdapterPosition());
         }
     }
 }

@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -49,9 +48,10 @@ public class DriverTripHistoryActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         tripsRecyclerView.setLayoutManager(layoutManager);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(tripsRecyclerView.getContext(),
-                layoutManager.getOrientation());
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.divider));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+                tripsRecyclerView.getContext(), layoutManager.getOrientation());
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getApplicationContext(),
+                R.drawable.divider));
         tripsRecyclerView.addItemDecoration(dividerItemDecoration);
 
         mDatabase.getReference().child("trips").addValueEventListener(new ValueEventListener() {

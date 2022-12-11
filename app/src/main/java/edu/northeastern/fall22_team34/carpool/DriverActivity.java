@@ -55,7 +55,8 @@ public class DriverActivity extends AppCompatActivity {
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent profileIntent = new Intent(getApplicationContext(), DriverProfileActivity.class);
+                Intent profileIntent = new Intent(getApplicationContext(),
+                        DriverProfileActivity.class);
                 profileIntent.putExtra("USERNAME", username);
                 startActivity(profileIntent);
             }
@@ -65,7 +66,8 @@ public class DriverActivity extends AppCompatActivity {
         vhProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent vhProfileIntent = new Intent(getApplicationContext(), VehicleProfileActivity.class);
+                Intent vhProfileIntent = new Intent(getApplicationContext(),
+                        VehicleProfileActivity.class);
                 vhProfileIntent.putExtra("USERNAME", username);
                 startActivity(vhProfileIntent);
             }
@@ -75,11 +77,13 @@ public class DriverActivity extends AppCompatActivity {
         newTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (user.driverProfile == null) {
+                if (user.driverProfile == null || user.vehicleProfile == null) {
                     Toast.makeText(DriverActivity.this,
-                            "Please Create a Driver Profile First", Toast.LENGTH_SHORT).show();
+                            "Please Create Your Driver and Vehicle Profile First",
+                            Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent newTripIntent = new Intent(getApplicationContext(), DriverNewTripActivity.class);
+                    Intent newTripIntent = new Intent(getApplicationContext(),
+                            DriverNewTripActivity.class);
                     newTripIntent.putExtra("USERNAME", username);
                     startActivity(newTripIntent);
                 }
@@ -90,7 +94,8 @@ public class DriverActivity extends AppCompatActivity {
         tripHistoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent historyIntent = new Intent(getApplicationContext(), DriverTripHistoryActivity.class);
+                Intent historyIntent = new Intent(getApplicationContext(),
+                        DriverTripHistoryActivity.class);
                 historyIntent.putExtra("USERNAME", username);
                 startActivity(historyIntent);
             }

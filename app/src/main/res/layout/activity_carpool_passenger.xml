@@ -7,6 +7,18 @@
     android:background="@color/colorPrimary"
     tools:context=".carpool.PassengerActivity">
 
+    <TextView
+        android:id="@+id/psg_head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Passenger Home"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="@dimen/_24sdp"
+        app:layout_constraintBottom_toTopOf="@id/passenger_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/passenger_profile"
         android:layout_width="wrap_content"
@@ -14,21 +26,42 @@
         android:backgroundTint="@color/colorTextIcons"
         android:text="Passenger Profile"
         android:textColor="@color/colorPrimaryDark"
-        app:layout_constraintBottom_toTopOf="@id/passenger_available_rides"
+        app:layout_constraintBottom_toTopOf="@id/passenger_nearby_trips"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/psg_head" />
 
     <Button
-        android:id="@+id/passenger_available_rides"
+        android:id="@+id/passenger_nearby_trips"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorTextIcons"
-        android:text="Available Trips"
+        android:text="Nearby Trips"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toTopOf="@id/passenger_history"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/distance_tv"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/passenger_profile" />
+
+    <TextView
+        android:id="@+id/distance_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Distance: "
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="@dimen/_15sdp"
+        app:layout_constraintBaseline_toBaselineOf="@id/passenger_nearby_trips"
+        app:layout_constraintEnd_toStartOf="@id/distance_spinner"
+        app:layout_constraintStart_toEndOf="@id/passenger_nearby_trips" />
+
+    <Spinner
+        android:id="@+id/distance_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorTextIcons"
+        app:layout_constraintBottom_toTopOf="@id/passenger_history"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/distance_tv"
         app:layout_constraintTop_toBottomOf="@id/passenger_profile" />
 
     <Button
@@ -41,6 +74,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/passenger_available_rides" />
+        app:layout_constraintTop_toBottomOf="@id/passenger_nearby_trips" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

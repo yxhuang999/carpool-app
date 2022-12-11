@@ -53,7 +53,7 @@ public class VehicleProfileActivity extends AppCompatActivity {
                         if (user.driverProfile != null && user.vehicleProfile != null) {
                             plateET.setText(user.vehicleProfile.plate);
                             colorET.setText(user.vehicleProfile.color);
-                            seatET.setText(user.vehicleProfile.seat);
+                            seatET.setText(user.vehicleProfile.seat + "");
                         }
                     }
                 }
@@ -109,8 +109,10 @@ public class VehicleProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@Nullable DatabaseError error, boolean committed,
                                            @Nullable DataSnapshot currentData) {
-                        Toast.makeText(VehicleProfileActivity.this,
-                                "DBError: " + error, Toast.LENGTH_SHORT).show();
+                        if (!committed) {
+                            Toast.makeText(VehicleProfileActivity.this,
+                                    "DBError: " + error, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
     }

@@ -105,8 +105,10 @@ public class PassengerProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@Nullable DatabaseError error, boolean committed,
                                            @Nullable DataSnapshot currentData) {
-                        Toast.makeText(PassengerProfileActivity.this,
-                                "DBError: " + error, Toast.LENGTH_SHORT).show();
+                        if (!committed) {
+                            Toast.makeText(PassengerProfileActivity.this,
+                                    "DBError: " + error, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
     }

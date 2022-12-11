@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_4sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/psg_tripFrom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="From: "
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/_13ssp" />
+
+        <TextView
+            android:id="@+id/psg_tripTo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="To: "
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/_13ssp" />
+
+        <TextView
+            android:id="@+id/psg_tripTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="Start Time: "
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/_13ssp" />
+
+        <TextView
+            android:id="@+id/psg_tripPassenger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="People Joined: "
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/_13ssp" />
+
+        <Button
+            android:id="@+id/psg_trip_join_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_12sdp"
+            android:backgroundTint="@color/colorTextIcons"
+            android:text="Join"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/_10sdp" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
