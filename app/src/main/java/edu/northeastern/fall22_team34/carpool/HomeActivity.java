@@ -23,6 +23,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -107,14 +108,17 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     // set camera view to current location
     private void setCameraView() {
-        double bottomBound = userLocation.getLatitude() - 0.1;
-        double leftBound = userLocation.getLongitude() - 0.1;
-        double topBound = userLocation.getLatitude() + 0.1;
-        double rightBound = userLocation.getLongitude() + 0.1;
+        double bottomBound = userLocation.getLatitude() - 0.05;
+        double leftBound = userLocation.getLongitude() - 0.05;
+        double topBound = userLocation.getLatitude() + 0.05;
+        double rightBound = userLocation.getLongitude() + 0.05;
 
         mMapBounds = new LatLngBounds(new LatLng(bottomBound, leftBound), new LatLng(topBound, rightBound));
 
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(mMapBounds, 0));
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(userLocation.getLatitude(), userLocation.getLongitude()))
+                .title("Current Location")).showInfoWindow();
     }
 
     @Override

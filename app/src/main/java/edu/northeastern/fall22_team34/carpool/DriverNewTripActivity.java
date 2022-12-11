@@ -7,6 +7,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -16,8 +18,10 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +36,7 @@ import com.google.maps.PendingResult;
 import com.google.maps.model.DirectionsResult;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -59,7 +64,15 @@ public class DriverNewTripActivity extends AppCompatActivity {
     private EditText from;
     private EditText destination;
     private TextView duration;
+
     private EditText time;
+    private TimePickerDialog timePickerDialog;
+    private Calendar calendar;
+    private int currentHour;
+    private int currentMinute;
+    private String amPm;
+
+    private EditText date;
 
 
     @Override
@@ -74,7 +87,56 @@ public class DriverNewTripActivity extends AppCompatActivity {
         from = findViewById(R.id.new_trip_et_from);
         destination = findViewById(R.id.new_trip_et_dest);
         duration = findViewById(R.id.new_trip_et_duration);
+
         time = findViewById(R.id.new_trip_et_time);
+        time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                calendar = Calendar.getInstance();
+                currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+                currentMinute = calendar.get(Calendar.MINUTE);
+
+                timePickerDialog = new TimePickerDialog(DriverNewTripActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
+                        if (hourOfDay >= 12) {
+                            amPm = "PM";
+                        } else {
+                            amPm = "AM";
+                        }
+                        time.setText(String.format("%02d:%02d", hourOfDay, minutes) + amPm);
+                    }
+                }, currentHour, currentMinute, false);
+
+                timePickerDialog.show();
+            }
+        });
+
+        date = findViewById(R.id.new_trip_et_date);
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        DriverNewTripActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // on below line we are setting date to our edit text.
+                                date.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                            }
+                        },
+                        year, month, day);
+                datePickerDialog.show();
+            }
+        });
 
         durationInit();
 
@@ -252,7 +314,8 @@ public class DriverNewTripActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (destination.getText().toString().isEmpty()
-                        || time.getText().toString().isEmpty()) {
+                        || time.getText().toString().isEmpty()
+                        || date.getText().toString().isEmpty()) {
                     Toast.makeText(DriverNewTripActivity.this,
                             "Please Provide All Necessary Information For This Trip",
                             Toast.LENGTH_SHORT).show();
@@ -282,7 +345,8 @@ public class DriverNewTripActivity extends AppCompatActivity {
                         String uniqueID = UUID.randomUUID().toString();
                         Trip trip = new Trip(uniqueID, user, userLocation.getLatitude(),
                                 userLocation.getLongitude(), destAddress.getLatitude(),
-                                destAddress.getLongitude(), tripDuration, time.getText().toString());
+                                destAddress.getLongitude(), tripDuration, time.getText().toString(),
+                                date.getText().toString());
 
                         mDatabase.getReference().child("trips").child(uniqueID).setValue(trip);
 

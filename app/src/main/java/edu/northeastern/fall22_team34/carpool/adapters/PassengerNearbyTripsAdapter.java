@@ -60,7 +60,7 @@ public class PassengerNearbyTripsAdapter extends
                         trip.endLong, 1);
                 holder.dest.setText("To: " + toAddress.get(0).getAddressLine(0));
 
-                holder.startTime.setText("Start Time: " + trip.time);
+                holder.startTime.setText("Start Time: " + trip.time + " " + trip.date);
 
                 String capacity = "";
                 if (trip.driver != null && trip.driver.vehicleProfile != null) {

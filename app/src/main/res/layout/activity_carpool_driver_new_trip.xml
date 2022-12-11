@@ -89,8 +89,8 @@
         android:id="@+id/new_trip_et_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorTextPrimary"
         android:text=""
+        android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_16ssp"
         app:layout_constraintBaseline_toBaselineOf="@id/new_trip_duration"
         app:layout_constraintEnd_toEndOf="parent"
@@ -103,7 +103,7 @@
         android:text="Start Time"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/_16sdp"
-        app:layout_constraintBottom_toTopOf="@id/btn_submit_trip"
+        app:layout_constraintBottom_toTopOf="@id/new_trip_date"
         app:layout_constraintEnd_toStartOf="@id/new_trip_et_time"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/new_trip_duration" />
@@ -113,15 +113,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
-        android:ems="12"
-        android:importantForAutofill="no"
-        android:inputType="time"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:ems="10"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:textColor="@color/colorTextIcons"
-        android:textColorHint="@color/colorTextSecondary"
-        android:textSize="@dimen/_12ssp"
         app:layout_constraintBaseline_toBaselineOf="@id/new_trip_time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/new_trip_time" />
+
+    <TextView
+        android:id="@+id/new_trip_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Date"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="@dimen/_16sdp"
+        app:layout_constraintBottom_toTopOf="@id/btn_submit_trip"
+        app:layout_constraintEnd_toStartOf="@id/new_trip_et_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/new_trip_time" />
+
+    <EditText
+        android:id="@+id/new_trip_et_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:ems="10"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:textColor="@color/colorTextIcons"
+        app:layout_constraintBaseline_toBaselineOf="@id/new_trip_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/new_trip_date" />
 
     <Button
         android:id="@+id/btn_submit_trip"
@@ -133,6 +160,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_trip_time" />
+        app:layout_constraintTop_toBottomOf="@id/new_trip_date" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

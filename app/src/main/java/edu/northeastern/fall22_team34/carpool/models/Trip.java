@@ -14,13 +14,14 @@ public class Trip implements java.io.Serializable {
     public double endLong;
     public String duration;
     public String time;
+    public String date;
 
     public Trip() {
 
     }
 
     public Trip(String id, User driver, double startLat, double startLong, double endLat,
-                double endLong, String duration, String time) {
+                double endLong, String duration, String time, String date) {
         this.id = id;
         this.driver = driver;
         this.passenger = new ArrayList<>();
@@ -30,5 +31,6 @@ public class Trip implements java.io.Serializable {
         this.endLong = endLong;
         this.duration = duration;
         this.time = time;
+        this.date = date;
     }
 }
