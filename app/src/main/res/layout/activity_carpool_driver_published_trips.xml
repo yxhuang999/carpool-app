@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".carpool.DriverTripHistoryActivity">
+    tools:context=".carpool.DriverPublishedTripsActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/driverTripsRV"

@@ -95,7 +95,7 @@ public class DriverActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent historyIntent = new Intent(getApplicationContext(),
-                        DriverTripHistoryActivity.class);
+                        DriverPublishedTripsActivity.class);
                 historyIntent.putExtra("USERNAME", username);
                 startActivity(historyIntent);
             }

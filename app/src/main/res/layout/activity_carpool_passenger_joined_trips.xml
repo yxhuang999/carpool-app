@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".carpool.PassengerNearbyTripsActivity">
+    tools:context=".carpool.PassengerJoinedTripsActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/psg_avail_trips_rv"
+        android:id="@+id/psg_joined_trips_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

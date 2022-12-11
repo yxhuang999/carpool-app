@@ -22,7 +22,7 @@ import edu.northeastern.fall22_team34.R;
 import edu.northeastern.fall22_team34.carpool.adapters.DriverTripAdapter;
 import edu.northeastern.fall22_team34.carpool.models.Trip;
 
-public class DriverTripHistoryActivity extends AppCompatActivity {
+public class DriverPublishedTripsActivity extends AppCompatActivity {
 
     private FirebaseDatabase mDatabase;
 
@@ -35,7 +35,7 @@ public class DriverTripHistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_carpool_driver_trip_history);
+        setContentView(R.layout.activity_carpool_driver_published_trips);
 
         mDatabase = FirebaseDatabase.getInstance();
 
@@ -68,7 +68,7 @@ public class DriverTripHistoryActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(DriverTripHistoryActivity.this, error.getMessage(),
+                Toast.makeText(DriverPublishedTripsActivity.this, error.getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
         });

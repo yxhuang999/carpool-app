@@ -96,6 +96,17 @@ public class PassengerActivity extends AppCompatActivity implements AdapterView.
                 }
             }
         });
+
+        Button joinedTripsButton = findViewById(R.id.passenger_joined_trips);
+        joinedTripsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent joinedTripsIntent = new Intent(getApplicationContext(),
+                        PassengerJoinedTripsActivity.class);
+                joinedTripsIntent.putExtra("USERNAME", username);
+                startActivity(joinedTripsIntent);
+            }
+        });
     }
 
     @Override

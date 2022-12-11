@@ -135,6 +135,8 @@ public class PassengerNearbyTripsActivity extends AppCompatActivity implements O
 
                     if (trip.passenger == null) {
                         trip.passenger = new ArrayList<>();
+                    } else if (trip.passenger.size() == trip.driver.vehicleProfile.seat) {
+                        check = true;
                     } else {
                         for (int i = 0; i < trip.passenger.size(); i++) {
                             if (userRef.username.equals(trip.passenger.get(i).username)) {
@@ -151,6 +153,7 @@ public class PassengerNearbyTripsActivity extends AppCompatActivity implements O
                             }
                         }
                     }
+
                     if (!check) {
                         trip.passenger.add(userRef);
                         currentData.setValue(trip);
