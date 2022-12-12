@@ -97,7 +97,7 @@ public class PassengerNearbyTripsActivity extends AppCompatActivity implements O
                     if (distance <= Integer.parseInt(distanceSelected)) {
                         Boolean check = false;
                         for (int i = 0; i < trips.size(); i++) {
-                            if (trip.id == trips.get(i).id) {
+                            if (trip.id.equals(trips.get(i).id)) {
                                 trips.set(i, trip);
                                 check = true;
                                 break;
@@ -125,58 +125,78 @@ public class PassengerNearbyTripsActivity extends AppCompatActivity implements O
         Trip tripSelected = trips.get(position);
         mDatabase.getReference().child("trips").child(tripSelected.id)
                 .runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                Trip trip = currentData.getValue(Trip.class);
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                        Trip trip = currentData.getValue(Trip.class);
 
-                if (trip != null) {
-                    Boolean check = false;
+                        if (trip != null) {
+                            Boolean check = false;
 
-                    if (trip.passenger == null) {
-                        trip.passenger = new ArrayList<>();
-                    } else if (trip.passenger.size() == trip.driver.vehicleProfile.seat) {
-                        check = true;
-                    } else {
-                        for (int i = 0; i < trip.passenger.size(); i++) {
-                            if (userRef.username.equals(trip.passenger.get(i).username)) {
+                            if (userRef.username.equals(trip.driver.username)) {
                                 check = true;
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Toast.makeText(PassengerNearbyTripsActivity.this,
-                                                "You Already Joined This Trip",
+                                                "You Can't Join Your Own Trip",
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                                break;
+                            } else {
+                                if (trip.passenger == null) {
+                                    trip.passenger = new ArrayList<>();
+                                } else if (trip.passenger.size() == trip.driver.vehicleProfile.seat) {
+                                    check = true;
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(PassengerNearbyTripsActivity.this,
+                                                    "This Trip is Full Now",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } else {
+                                    for (int i = 0; i < trip.passenger.size(); i++) {
+                                        if (userRef.username.equals(trip.passenger.get(i).username)) {
+                                            check = true;
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(PassengerNearbyTripsActivity.this,
+                                                            "You Already Joined This Trip",
+                                                            Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (!check) {
+                                trip.passenger.add(userRef);
+                                currentData.setValue(trip);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(PassengerNearbyTripsActivity.this,
+                                                "Joined Successfully", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
                         }
+                        return Transaction.success(currentData);
                     }
 
-                    if (!check) {
-                        trip.passenger.add(userRef);
-                        currentData.setValue(trip);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(PassengerNearbyTripsActivity.this,
-                                        "Joined Successfully", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, boolean committed,
+                                           @Nullable DataSnapshot currentData) {
+                        if (!committed) {
+                            Toast.makeText(PassengerNearbyTripsActivity.this,
+                                    "DBError: " + error, Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-                return Transaction.success(currentData);
-            }
-
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed,
-                                   @Nullable DataSnapshot currentData) {
-                if (!committed) {
-                    Toast.makeText(PassengerNearbyTripsActivity.this,
-                            "DBError: " + error, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+                });
     }
 }

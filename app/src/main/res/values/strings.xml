@@ -6,6 +6,8 @@
     <string name="carpool_name">Carpool Login</string>
     <string name="carpool_slogan">On My Way</string>
     <string-array name="nearbyTrip_distance">
+        <item>2000</item>
+        <item>3000</item>
         <item>4000</item>
         <item>5000</item>
         <item>6000</item>

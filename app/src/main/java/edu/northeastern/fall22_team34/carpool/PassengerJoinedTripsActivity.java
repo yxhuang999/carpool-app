@@ -60,10 +60,14 @@ public class PassengerJoinedTripsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Trip trip = dataSnapshot.getValue(Trip.class);
-                    for (int i = 0; i < trip.passenger.size(); i++) {
-                        User user = trip.passenger.get(i);
-                        if (username.equals(user.username)) {
-                            trips.add(trip);
+
+                    if (trip.passenger != null && trip.passenger.size() > 0) {
+                        for (int i = 0; i < trip.passenger.size(); i++) {
+                            User user = trip.passenger.get(i);
+                            if (username.equals(user.username)) {
+                                trips.add(trip);
+                                break;
+                            }
                         }
                     }
 
