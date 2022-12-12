@@ -167,8 +167,6 @@ public class DriverNewTripActivity extends AppCompatActivity {
             }
         });
 
-        onFromEntered();
-
         onDestinationEntered();
 
         onTripSubmit();
@@ -289,24 +287,6 @@ public class DriverNewTripActivity extends AppCompatActivity {
                         0, 0, locationListener);
             }
         }
-    }
-
-    private void onFromEntered() {
-        from.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus && from.getText().toString().length() > 5) {
-                    try {
-                        List<Address> result = mGeocoder
-                                .getFromLocationName(from.getText().toString(), 5);
-                        destAddress = result.get(0);
-                        from.setText(destAddress.getAddressLine(0));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
     }
 
     private void onDestinationEntered() {
